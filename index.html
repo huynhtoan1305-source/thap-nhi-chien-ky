@@ -991,8 +991,49 @@ function useSkill(i){
   if(i===0){if(upg(1)){let tg=G.aimT&&!G.aimT.dead&&G.aimT!==B?G.aimT:null;if(!tg){let bd=320;for(const e of ens){if(e.dead||e.t==="barrel")continue;const d=Math.hypot(e.x+e.w/2-p.x-6,e.y+e.h/2-p.y-11);if(d<bd){bd=d;tg=e}}}if(!tg&&G.aimT===B&&B)tg=B;
     const sx=fx-8,sy=p.y-8,tx=tg?tg.x+tg.w/2-8:sx+f*120,ty=tg?tg.y+tg.h/2-8:p.y+p.h-16,T0=clamp(Math.abs(tx-sx)/4.2,18,46),g=.25;
     const snowSize=upg(1)?p.h*2:16; // Nang cap A: duong kinh ban dau gap 2 lan chieu cao nhan vat
-    pB.push({snow:1,arc:1,bn:0,x:sx-(snowSize-16)/2,y:sy-(snowSize-16)/2,w:snowSize,h:snowSize,baseSize:snowSize,vx:(tx-sx)/T0,vy:clamp((ty-sy-.5*g*T0*T0)/T0,-9,4),dmg:2,pierce:true,hit:new Set(),freeze:1,c:"#dff4ff",life:260,rot:0,held:[],sc:1,growT:0,growMax:upg(1)?2.5:1,tgt:tg})}
-   else {const snowSize=upg(1)?p.h*2:16;pB.push({snow:1,x:fx-snowSize/2,y:p.y+p.h-18,w:snowSize,h:snowSize,baseSize:snowSize,vx:f*3.6,vy:0,dmg:2,pierce:true,hit:new Set(),freeze:1,c:"#dff4ff",life:200,rot:0,held:null,sc:1,growT:0,growMax:upg(1)?2.5:1})}sfx("charge")}
+    if (b.snow) {
+    ctx.save();
+    ctx.translate(b.x + b.w / 2, b.y + b.h / 2);
+    
+    // Tính toán kích thước phóng lớn theo thời gian (nếu có hiệu ứng lớn dần)
+    let currentScale = b.sc || 1;
+    let radius = (b.baseSize / 2) * currentScale;
+
+    // 1. Viền hào quang bên ngoài (tạo cảm giác bão tuyết / năng lượng lạnh)
+    let gradGlow = ctx.createRadialGradient(0, 0, radius * 0.5, 0, radius, radius * 1.4);
+    gradGlow.addColorStop(0, "rgba(168, 216, 255, 0.6)");
+    gradGlow.addColorStop(1, "rgba(255, 255, 255, 0)");
+    ctx.beginPath();
+    ctx.arc(0, 0, radius * 1.4, 0, Math.PI * 2);
+    ctx.fillStyle = gradGlow;
+    ctx.fill();
+
+    // 2. Thân khối cầu tuyết chính (Màu xanh băng đặc, to rõ, rõ ràng)
+    let gradBody = ctx.createRadialGradient(-radius * 0.3, -radius * 0.3, radius * 0.1, 0, 0, radius);
+    gradBody.addColorStop(0, "#ffffff");   // Tâm sáng trắng
+    gradBody.addColorStop(0.4, "#dff4ff"); // Trắng xanh băng
+    gradBody.addColorStop(0.8, "#7ab8e9"); // Xanh băng đậm dần ra viền
+    gradBody.addColorStop(1, "#3a88cb");   // Viền cứng cáp tạo khối 3D
+    
+    ctx.beginPath();
+    ctx.arc(0, 0, radius, 0, Math.PI * 2);
+    ctx.fillStyle = gradBody;
+    ctx.fill();
+    
+    // Viền ngoài sắc nét
+    ctx.lineWidth = 2.5;
+    ctx.strokeStyle = "#ffffff";
+    ctx.stroke();
+
+    // 3. Hiệu ứng vân tuyết / ánh sáng xoáy bên trong (giống như cuộn tuyết)
+    ctx.beginPath();
+    ctx.arc(-radius * 0.2, -radius * 0.2, radius * 0.5, 0.2, Math.PI * 0.8);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
+    ctx.stroke();
+
+    ctx.restore();
+}
   else if(i===1){p.shieldT=120;p.orbLaunch=true;sfx("pick");if(birdOn()&&!BIRD.down){BIRD.atk=1;popup("CHIM RỪNG XUẤT KÍCH!",BIRD.x,BIRD.y-26,"#5fe8f0",8)}}
   else{const am=G.aimT&&!(G.aimT.dead)?G.aimT:null,tg=ens.filter(e=>!e.dead&&e!==am&&e.t!=="barrel"&&e.x>G.cam&&e.x<G.cam+WVW).map(e=>e.x+e.w/2);if(B&&B.state==="fight"&&am!==B){tg.unshift(B.x+B.w/2)}if(am){const ax=am.x+am.w/2;tg.unshift(ax-6,ax+6,ax)}
    while(tg.length<3)tg.push(G.cam+30+Math.random()*(WVW-60));
