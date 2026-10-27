@@ -1032,7 +1032,7 @@ function useSkill(i){
     ctx.strokeStyle = "rgba(255, 255, 255, 0.7)";
     ctx.stroke();
 
-    ctx.restore();
+    ctx.restore(); 
 }
   else if(i===1){p.shieldT=120;p.orbLaunch=true;sfx("pick");if(birdOn()&&!BIRD.down){BIRD.atk=1;popup("CHIM RỪNG XUẤT KÍCH!",BIRD.x,BIRD.y-26,"#5fe8f0",8)}}
   else{const am=G.aimT&&!(G.aimT.dead)?G.aimT:null,tg=ens.filter(e=>!e.dead&&e!==am&&e.t!=="barrel"&&e.x>G.cam&&e.x<G.cam+WVW).map(e=>e.x+e.w/2);if(B&&B.state==="fight"&&am!==B){tg.unshift(B.x+B.w/2)}if(am){const ax=am.x+am.w/2;tg.unshift(ax-6,ax+6,ax)}
