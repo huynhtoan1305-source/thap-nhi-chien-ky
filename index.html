@@ -176,9 +176,9 @@ const khacOf=k=>KHAC.findIndex(a=>a.includes(k));
 const upgN=h=>KHAC[h].filter(k=>save.frag[Z.findIndex(z=>z.k===k)]).length;
 const SPEC=[7,3,11],upg=h=>!!(save.frag&&save.frag[SPEC[h]]);
 const UPL=[{h:0,m:1,k:"burn",n:"Hỏa Diệm Đạn",lines:["Đạn thường xuyên thêm 1 quái, trúng là nổ nhỏ và thiêu đốt 3 giây.","Đạn nạp nổ hất lùi quái và thiêu đốt 3 giây."]},
- {h:0,m:4,k:"zap",n:"Lôi Drone",lines:["A · Drone phóng tia điện dây chuyền: giật con gần nhất rồi truyền tiếp sang con kế bên, tối đa 3 địch.","6 lần mỗi giây, 1 sát thương mỗi lần giật."]},
+ {h:0,m:3,k:"zap",n:"Lôi Drone",lines:["A · Drone phóng tia điện dây chuyền: giật con gần nhất rồi truyền tiếp sang con kế bên, tối đa 3 địch.","6 lần mỗi giây, 1 sát thương mỗi lần giật."]},
  {h:0,m:7,k:"spider",n:"Hỏa Tiễn Nhện Máy",lines:["S · Mưa Pháo: tên lửa trúng quái sẽ bám dính, 1 giây sau mới nổ.","Tên lửa trúng tường hóa thành nhện máy, tự bò đi tìm quái rồi nổ."]},
- {h:1,m:3,k:"snow",n:"Đại Tuyết Cầu",lines:null},
+ {h:1,m:4,k:"snow",n:"Đại Tuyết Cầu",lines:null},
  {h:1,m:9,k:"ally",n:"Hồi Hồn Khế Ước",lines:["S · Quái bị tiêu diệt khi đã dính Tam Linh Cầu (trừ boss) hồi sinh tại chỗ thành đồng minh trong 15 giây.","Đồng minh theo Miên như drone, tấn công và di chuyển theo kiểu của con đó.","Sức mạnh bằng 50% Miên, tốc độ đánh +100%. Tối đa 3 đồng minh, đủ 3 thì phải đợi một con biến mất mới hồi sinh thêm."]},
  {h:2,m:8,k:"minip",n:"Tiểu Phong Trúc Côn",lines:["Thương D · mỗi quái trên màn hình (kể cả boss) có 1 Phong Nhỏ cầm gậy trúc đáp xuống đầu.","Rơi hụt thì đáp xuống đất hoặc cành cây gặp trước, rồi rượt quái gần nhất trong 2,5 giây, nhảy lên đạp đầu nó; rơi trúng quái thì nhảy gõ liên tục lên đầu quái trong 2,5 giây rồi biến mất.","Mỗi cú gõ bằng 25% sát thương của Phong, tốc độ gõ gấp đôi."]},
  {h:2,m:11,k:"sword",n:"Thất Tinh Kiếm",lines:null}];
@@ -1488,7 +1488,7 @@ const ATK={
   return a.pt>40+n*24+20},
  tornado(b,a,o){b.vx*=.9;b.vy*=.9;b.flash=a.pt<20&&a.pt%4<2;
   if(a.pt===20){const n=b.rage>1?2:1;for(let i=0;i<n;i++){const x=n===1?b.x+b.w/2:(i?AR()-60:AL()+60);eB.push({tornado:1,persist:1,nowall:1,x:x-16,y:FLOOR-84,w:32,h:84,vx:0,vy:0,dmg:2,life:120,c:"#cfe8ff"})}popup("LỐC XOÁY!",b.x+b.w/2,b.y-10,"#cfe8ff");sfx("nova")}
-  return a.pt>60},
+  return a.pt>180},
  banana(b,a,o){b.vx*=.9;b.vy*=.9;b.face=P.x+6<b.x+b.w/2?-1:1;const n=b.rage>1?5:4;
   if(a.pt>=14&&(a.pt-14)%8===0&&(a.pt-14)/8<n){const k=(a.pt-14)/8,cx=b.x+b.w/2,cy=b.y+b.h*.4,tx=clamp(P.x+6+(k-(n-1)/2)*42,AL()+10,AR()-10),T0=42,g=.2,vx=(tx-cx)/T0,vy=(FLOOR-6-cy-.5*g*T0*T0)/T0;eShot(cx,cy,vx,vy,{banana:1,root:0,peelRoot:o.root?1:0,grav:g,r:5,c:"#ffe14a",dmg:2,nowall:1});sfx("shot")}
   return a.pt>14+n*8+20},
@@ -2524,7 +2524,7 @@ Object.assign(ATK,{
  shapes(b,a,o){b.vx*=.9;b.vy*=.9;b.face=P.x+6<b.x+b.w/2?-1:1;b.flash=a.pt<12&&a.pt%4<2;const cx=b.x+b.w/2+b.face*b.w*.3,cy=b.y+b.h*.4,an=aimAt(cx,cy);
   if(a.pt===14||a.pt===22||(b.rage>1&&a.pt===30)){eShot(cx,cy,Math.cos(an)*5.2,Math.sin(an)*5.2,{shp:"arrow",r:4,c:b.d.c2,dmg:3});sfx("shot")}
   if(a.pt===40){for(let i=-1;i<=1;i++)eShot(cx,cy,Math.cos(an+i*.3)*3.4,Math.sin(an+i*.3)*3.4,{shp:"tri",r:5,c:b.d.c2,dmg:2});sfx("shot")}
-  if(a.pt===62){if(o.storm){const r=b.mini?11:17,hp=mkEnemy({t:"walker",x:0,row:0}).hp*(b.mini?1:2);ens.push({t:"stormb",minion:true,x:cx-r,y:cy-r,w:r*2,h:r*2,vx:Math.cos(an)*1.3,vy:Math.sin(an)*1.3,hp,maxhp:hp,life:420,face:1,inv:0,ph:0,rot:0});popup("CẦU BÃO",cx,cy-14,"#dfe8ff",8)}else eShot(cx,cy,Math.cos(an)*2.3,Math.sin(an)*2.3,{shp:"circ",home:1,hr:.02,r:9,c:b.d.c2,dmg:4,life:300});sfx("big")}
+  if(a.pt===62){if(o.storm){const r=b.mini?11:17,hp=40;ens.push({t:"stormb",minion:true,x:cx-r,y:cy-r,w:r*2,h:r*2,vx:Math.cos(an)*1.3,vy:Math.sin(an)*1.3,hp,maxhp:hp,life:420,face:1,inv:0,ph:0,rot:0});popup("CẦU BÃO",cx,cy-14,"#dfe8ff",8)}else eShot(cx,cy,Math.cos(an)*2.3,Math.sin(an)*2.3,{shp:"circ",home:1,hr:.02,r:9,c:b.d.c2,dmg:4,life:300});sfx("big")}
   return a.pt>80},
  shuri(b,a,o){b.vx*=.9;b.vy*=.9;b.face=P.x+6<b.x+b.w/2?-1:1;b.flash=a.pt<12&&a.pt%4<2;
   if(a.pt===14||(b.rage>1&&a.pt===36)){const cx=b.x+b.w/2,cy=b.y+b.h*.4,an=aimAt(cx,cy);for(let i=-1;i<=1;i++)eShot(cx,cy,Math.cos(an+i*.35)*4,Math.sin(an+i*.35)*4,{shuri:1,wb:3,nowall:1,r:5,c:"#dfe6ee",dmg:2,poisonG:1,life:420});sfx("shot")}
@@ -3027,7 +3027,7 @@ function drawStage(){
   else if(b.dragon){const tr=b.trail;for(let i=tr.length-1;i>=0;i--){const q=tr[i],r=11-i*.45;circ(q.x,q.y,r+3,"rgba(255,200,80,.25)");circ(q.x,q.y,r,i%2?"#ffd34d":"#ffb02e");if(i%3===0)poly([q.x-3,q.y-r,q.x,q.y-r-6,q.x+3,q.y-r],"#fff6c0")}
    const hx=b.x+b.w/2,hy=b.y+b.h/2;ctx.save();ctx.translate(hx,hy);ctx.rotate(Math.atan2(b.vy,Math.abs(b.vx))*b.f);ctx.scale(b.f,1);circ(0,0,12,"#ffd34d");poly([4,-6,20,-2,20,5,4,7],"#ffe27a");circ(4,-4,2.6,"#fff");circ(4.8,-4,1.3,"#c8202f");
    ctx.strokeStyle="#fff6c0";ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(-2,-9);ctx.lineTo(-9,-20);ctx.moveTo(3,-10);ctx.lineTo(-1,-22);ctx.stroke();ctx.strokeStyle="#fff";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(18,3);ctx.quadraticCurveTo(26,8,22,16);ctx.stroke();ctx.restore()}
-  else if(b.snow){const cx=b.x+b.w/2,cy=b.y+b.h/2,sr=Math.min(b.w,b.h)/2;circ(cx,cy,sr,rg("#eaf6ff",cx,cy,sr));ctx.save();ctx.translate(cx,cy);ctx.rotate(b.rot);ctx.strokeStyle="rgba(120,170,220,.8)";ctx.lineWidth=Math.max(1,sr*.08);ctx.beginPath();ctx.arc(0,0,sr*.56,0,2.2);ctx.stroke();ctx.beginPath();ctx.moveTo(-sr*.62,sr*.22);ctx.lineTo(sr*.62,-sr*.22);ctx.stroke();ctx.restore();circ(cx-sr*.32,cy-sr*.32,Math.max(1,sr*.2),"rgba(255,255,255,.95)")}
+  else if(b.snow){const cx=b.x+b.w/2,cy=b.y+b.h/2,sr=Math.max(1,Math.min(b.w,b.h)/2);ctx.save();ctx.beginPath();ctx.arc(cx,cy,sr,0,6.283);ctx.clip();circ(cx,cy,sr,rg("#eaf6ff",cx,cy,sr));ctx.translate(cx,cy);ctx.rotate(b.rot);ctx.strokeStyle="rgba(120,170,220,.8)";ctx.lineWidth=Math.max(1,sr*.08);ctx.beginPath();ctx.arc(0,0,sr*.56,0,2.2);ctx.stroke();ctx.beginPath();ctx.moveTo(-sr*.62,sr*.22);ctx.lineTo(sr*.62,-sr*.22);ctx.stroke();ctx.restore();circ(cx-sr*.32,cy-sr*.32,Math.max(1,sr*.2),"rgba(255,255,255,.95)")}
   else if(b.eggR){ctx.save();ctx.translate(b.x+b.w/2,b.y+b.h/2);ctx.rotate(G.t*.3);circ(0,0,8,"rgba(159,232,255,.35)");ctx.fillStyle="#fff6e0";ctx.beginPath();ctx.ellipse(0,0,4,5.5,0,0,6.283);ctx.fill();circ(-1,-2,1.2,"#fff");ctx.restore()}
   else if(b.tball){const cx=b.x+b.w/2,cy=b.y+b.h/2,sp=Math.hypot(b.vx,b.vy),a=sp?Math.atan2(b.vy,b.vx):(P.face>0?.1745:Math.PI-.1745);
    if(sp)for(let k=7;k>=1;k--){ctx.globalAlpha=.06+.04*(7-k);circ(cx-Math.cos(a)*k*8,cy-Math.sin(a)*k*8,13-k*1.4,k%2?"#7ff8ff":"#e8ffff")}
