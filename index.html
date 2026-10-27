@@ -992,7 +992,7 @@ function useSkill(i){
     const sx=fx-8,sy=p.y-8,tx=tg?tg.x+tg.w/2-8:sx+f*120,ty=tg?tg.y+tg.h/2-8:p.y+p.h-16,T0=clamp(Math.abs(tx-sx)/4.2,18,46),g=.25;
     const snowSize=upg(1)?p.h*2:16; // Nang cap A: duong kinh ban dau gap 2 lan chieu cao nhan vat
     pB.push({snow:1,arc:1,bn:0,x:sx-(snowSize-16)/2,y:sy-(snowSize-16)/2,w:snowSize,h:snowSize,baseSize:snowSize,vx:(tx-sx)/T0,vy:clamp((ty-sy-.5*g*T0*T0)/T0,-9,4),dmg:2,pierce:true,hit:new Set(),freeze:1,c:"#dff4ff",life:260,rot:0,held:[],sc:1,growT:0,growMax:upg(1)?2.5:1,tgt:tg})}
-   else {const snowSize=upg(1)?p.h*2:16;pB.push({snow:1,x:fx-snowSize/2,y:p.y+p.h-18,w:snowSize,h:snowSize,baseSize:snowSize,vx:f*3.6,vy:f*3.6,dmg:10,pierce:true,hit:new Set(),freeze:1,c:"#dff4ff",life:200,rot:0,held:null,sc:1,growT:0,growMax:upg(1)?2.5:1})}sfx("charge")}
+   else {const snowSize=upg(1)?p.h*2:16;pB.push({snow:1,x:fx-snowSize/2,y:p.y+p.h-10,w:snowSize,h:snowSize,baseSize:snowSize,vx:f*3.6,vy:0,dmg:10,pierce:true,hit:new Set(),freeze:1,c:"#dff4ff",life:200,rot:0,held:null,sc:1,growT:0,growMax:upg(1)?2.5:1})}sfx("charge")}
   else if(i===1){p.shieldT=120;p.orbLaunch=true;sfx("pick");if(birdOn()&&!BIRD.down){BIRD.atk=1;popup("CHIM RỪNG XUẤT KÍCH!",BIRD.x,BIRD.y-26,"#5fe8f0",8)}}
   else{const am=G.aimT&&!(G.aimT.dead)?G.aimT:null,tg=ens.filter(e=>!e.dead&&e!==am&&e.t!=="barrel"&&e.x>G.cam&&e.x<G.cam+WVW).map(e=>e.x+e.w/2);if(B&&B.state==="fight"&&am!==B){tg.unshift(B.x+B.w/2)}if(am){const ax=am.x+am.w/2;tg.unshift(ax-6,ax+6,ax)}
    while(tg.length<3)tg.push(G.cam+30+Math.random()*(WVW-60));
