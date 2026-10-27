@@ -183,7 +183,7 @@ const UPL=[{h:0,m:1,k:"burn",n:"Hỏa Diệm Đạn",lines:["Đạn thường xu
  {h:2,m:8,k:"minip",n:"Tiểu Phong Trúc Côn",lines:["Thương D · mỗi quái trên màn hình (kể cả boss) có 1 Phong Nhỏ cầm gậy trúc đáp xuống đầu.","Rơi hụt thì đáp xuống đất hoặc cành cây gặp trước, rồi rượt quái gần nhất trong 2,5 giây, nhảy lên đạp đầu nó; rơi trúng quái thì nhảy gõ liên tục lên đầu quái trong 2,5 giây rồi biến mất.","Mỗi cú gõ bằng 25% sát thương của Phong, tốc độ gõ gấp đôi."]},
  {h:2,m:11,k:"sword",n:"Thất Tinh Kiếm",lines:null}];
 const SPECS=[0,1,2].map(h=>UPL.filter(u=>u.h===h).map(u=>u.m)),uOn=k=>{const u=UPL.find(q=>q.k===k);return !!(u&&save.frag&&save.frag[u.m])};
-const UPG=[{n:"Hỏa Tiễn Nhện Máy",d:"S: tên lửa bám quái/hóa nhện máy · đạn thường xuyên 1 quái + nổ thiêu đốt · A: drone giật điện 3 địch"},{n:"Đại Tuyết Cầu",d:"A: cầu tuyết cuốn quái theo, càng nhiều quái càng to (tới 250%)"},{n:"Thất Tinh Kiếm",d:"Kiếm S: 7 kiếm, cắm vào đâu nổ sau 1s · Long Ảnh +5 vụ nổ"}];
+const UPG=[{n:"Hỏa Tiễn Nhện Máy",d:"S: tên lửa bám quái/hóa nhện máy · đạn thường xuyên 1 quái + nổ thiêu đốt · A: drone giật điện 3 địch"},{n:"Đại Tuyết Cầu",d:"A: cầu tuyết cuốn quái theo, tự lớn dần trong 1,5 giây tới 250%, quái bị cuốn theo"},{n:"Thất Tinh Kiếm",d:"Kiếm S: 7 kiếm, cắm vào đâu nổ sau 1s · Long Ảnh +5 vụ nổ"}];
 
 /* ---------------- input ---------------- */
 const ACTS=["left","right","up","down","jump","shoot","dash","guard","nova","s1","s2","s3","start","back","chest","tab","mute"];
@@ -990,9 +990,9 @@ function useSkill(i){
  }else if(c===1){
   if(i===0){if(upg(1)){let tg=G.aimT&&!G.aimT.dead&&G.aimT!==B?G.aimT:null;if(!tg){let bd=320;for(const e of ens){if(e.dead||e.t==="barrel")continue;const d=Math.hypot(e.x+e.w/2-p.x-6,e.y+e.h/2-p.y-11);if(d<bd){bd=d;tg=e}}}if(!tg&&G.aimT===B&&B)tg=B;
     const sx=fx-8,sy=p.y-8,tx=tg?tg.x+tg.w/2-8:sx+f*120,ty=tg?tg.y+tg.h/2-8:p.y+p.h-16,T0=clamp(Math.abs(tx-sx)/4.2,18,46),g=.25;
-    const snowSize=upg(1)?p.h:16; // Nang cap A: duong kinh = chieu cao nhan vat, da giam 50% so voi ban truoc
-    pB.push({snow:1,arc:1,bn:0,x:sx-(snowSize-16)/2,y:sy-(snowSize-16)/2,w:snowSize,h:snowSize,baseSize:snowSize,vx:(tx-sx)/T0,vy:clamp((ty-sy-.5*g*T0*T0)/T0,-9,4),dmg:2,pierce:true,hit:new Set(),freeze:1,c:"#dff4ff",life:260,rot:0,held:[],sc:1,tgt:tg})}
-   else {const snowSize=upg(1)?p.h:16;pB.push({snow:1,x:fx-snowSize/2,y:p.y+p.h-18,w:snowSize,h:snowSize,baseSize:snowSize,vx:f*3.4,vy:0,dmg:2,pierce:true,hit:new Set(),freeze:1,c:"#dff4ff",life:200,rot:0,held:null,sc:1})}sfx("charge")}
+    const snowSize=upg(1)?p.h*2:16; // Nang cap A: duong kinh ban dau gap 2 lan chieu cao nhan vat
+    pB.push({snow:1,arc:1,bn:0,x:sx-(snowSize-16)/2,y:sy-(snowSize-16)/2,w:snowSize,h:snowSize,baseSize:snowSize,vx:(tx-sx)/T0,vy:clamp((ty-sy-.5*g*T0*T0)/T0,-9,4),dmg:2,pierce:true,hit:new Set(),freeze:1,c:"#dff4ff",life:260,rot:0,held:[],sc:1,growT:0,growMax:upg(1)?2.5:1,tgt:tg})}
+   else {const snowSize=upg(1)?p.h*2:16;pB.push({snow:1,x:fx-snowSize/2,y:p.y+p.h-18,w:snowSize,h:snowSize,baseSize:snowSize,vx:f*3.6,vy:0,dmg:2,pierce:true,hit:new Set(),freeze:1,c:"#dff4ff",life:200,rot:0,held:null,sc:1,growT:0,growMax:upg(1)?2.5:1})}sfx("charge")}
   else if(i===1){p.shieldT=120;p.orbLaunch=true;sfx("pick");if(birdOn()&&!BIRD.down){BIRD.atk=1;popup("CHIM RỪNG XUẤT KÍCH!",BIRD.x,BIRD.y-26,"#5fe8f0",8)}}
   else{const am=G.aimT&&!(G.aimT.dead)?G.aimT:null,tg=ens.filter(e=>!e.dead&&e!==am&&e.t!=="barrel"&&e.x>G.cam&&e.x<G.cam+WVW).map(e=>e.x+e.w/2);if(B&&B.state==="fight"&&am!==B){tg.unshift(B.x+B.w/2)}if(am){const ax=am.x+am.w/2;tg.unshift(ax-6,ax+6,ax)}
    while(tg.length<3)tg.push(G.cam+30+Math.random()*(WVW-60));
@@ -1731,8 +1731,8 @@ function updateBullets(){
     if(Math.hypot(t.x+t.w/2-b.x-b.w/2,t.y+t.h/2-b.y-b.h/2)<16){b.seen.add(t);b.n++;burst(b.x+b.w/2,b.y+b.h/2,"#ffd34d",10);shake(3)}}
    else{const m=Math.hypot(b.vx,b.vy)||1;b.vx=b.vx/m*sp;b.vy=b.vy/m*sp}
    b.x+=b.vx;b.y+=b.vy;b.f=b.vx>=0?1:-1;b.life--;if(b.n>0&&!b.tgt&&(b.x<G.cam-80||b.x>G.cam+WVW+80||b.y<G.camY-80||b.y>G.camY+WVH+80))b.life=0}
-  else if(b.snow){if(b.held){b.held=b.held.filter(e=>!e.dead);const sc=Math.min(2.5,1+.3*b.held.length);if(sc>b.sc){const cx=b.x+b.w/2,by=b.y+b.h;b.sc=Math.min(sc,b.sc+.05);b.w=b.h=(b.baseSize||16)*b.sc;b.x=cx-b.w/2;b.y=by-b.h;b.dmg=2+Math.round(b.sc)}
-    b.held.forEach((e,k)=>{const a=b.rot*.6+k*2.4,r=b.w*.42;e.x=b.x+b.w/2+Math.cos(a)*r-e.w/2;e.y=b.y+b.h/2+Math.sin(a)*r*.6-e.h/2;e.vx=0;e.vy=0;e.frozen=Math.max(e.frozen||0,4)})}
+  else if(b.snow){if(b.held){b.held=b.held.filter(e=>!e.dead)}if(b.growMax>1){b.growT=(b.growT||0)+1;const timeScale=1+(b.growMax-1)*Math.min(1,b.growT/90);const heldScale=b.held?Math.min(b.growMax,1+.3*b.held.length):1;const targetScale=Math.max(timeScale,heldScale);if(targetScale>b.sc){const cx=b.x+b.w/2,by=b.y+b.h;b.sc=Math.min(targetScale,b.sc+(b.growMax-1)/90);b.w=b.h=(b.baseSize||16)*b.sc;b.x=cx-b.w/2;b.y=by-b.h;b.dmg=2+Math.round(b.sc)}}
+    if(b.held)b.held.forEach((e,k)=>{const a=b.rot*.6+k*2.4,r=b.w*.42;e.x=b.x+b.w/2+Math.cos(a)*r-e.w/2;e.y=b.y+b.h/2+Math.sin(a)*r*.6-e.h/2;e.vx=0;e.vy=0;e.frozen=Math.max(e.frozen||0,4)})
    if(b.arc){const tt=b.tgt;if(b.bn===0&&tt&&!tt.dead&&!(tt===B&&(!B||B.hidden))&&!b.held.length){const dx=tt.x+tt.w/2-b.x-b.w/2,dy=tt.y+tt.h/2-b.y-b.h/2;b.vx=clamp(b.vx+clamp(dx*.03,-.5,.5),-6,6);if(Math.abs(dx)<60)b.vy+=clamp(dy*.02,-.6,.6)-.12}
     b.vy=Math.min(b.vy+.25,7);b.x+=b.vx;if(boxHit(b.x,b.y,b.w,b.h-1)){if(b.bn&&!boxHit(b.x,b.y-T,b.w,b.h-1)&&b.sc<1.6)b.y-=T;else{b.x-=b.vx;b.wb=(b.wb|0)+1;if(b.wb>2){b.life=0;b.wall=1}else{b.vx=-b.vx;if(b.bn)b.dir=-b.dir;burst(b.x+b.w/2+Math.sign(b.vx)*-b.w/2,b.y+b.h/2,"#dff4ff",8);sfx("hit");shake(2);popup(b.wb===1?"NẢY":"NẢY 2",b.x+b.w/2,b.y-6,"#dff4ff",7)}}}
     b.y+=b.vy;if(boxHit(b.x,b.y,b.w,b.h)){if(b.vy>0){b.y=Math.floor((b.y+b.h)/T)*T-b.h;if(!b.bn){b.bn=1;b.dir=Math.sign(b.vx||P.face);burst(b.x+b.w/2,b.y+b.h,"#dff4ff",10);sfx("hit");shake(2)}b.vy=0}else{b.y-=b.vy;b.vy=0}}
