@@ -802,8 +802,6 @@ function bacFire(lv){const p=P,f=p.face,asc=bacAsc(),base=bacBase();if(p.onG){p.
  if(!(asc&&!p.onG)&&bacUpper())return;
  if(!p.onG&&asc&&G.t-(p.jumpT??-999)<=15&&(p.kickN|0)<2){p.kickN=2;p.dragS={st:0,t:0,ch:0,viaX:1};const am=Math.max(2,Math.round(P.max*.1));if(!(P.bsh&&P.bsh.a>=am))P.bsh={a:am,m:am,t:300,bac:1};sfx("dash");return}
  if(!p.onG&&!asc){if(p.kickReady>0&&!p.kick2){p.kick2={t:0};p.kickReady=0;sfx("dash");return}
-  if(bacLv()>=3&&G.t-(p.jumpT??-999)<=15){if((p.kickN|0)<2){p.kickN=2;p.dragS={st:0,t:0,ch:0,viaX:1};const am=Math.max(2,Math.round(P.max*.1));if(!(P.bsh&&P.bsh.a>=am))P.bsh={a:am,m:am,t:300,bac:1};sfx("dash");}return}
-  if(bacLv()>=3){bacCombo();return}
   if((p.kickN|0)<2){const a=.5236,F=p.face,sp=7,lv2=false;if(!lv2)pB.push({hmoonP:1,elec:1,x:p.x+6+F*16-10,y:p.y+11+4-7,w:20,h:14,vx:F*sp*Math.cos(a),vy:sp*Math.sin(a),ang:a,sc:lv2?.7:.55,dmg:bacBase()+1,pierce:true,hit:new Set(),reflect:1,c:"#9fe0ff",life:36,f:F});sfx("shot");snd("spark",80,.5);p.kick1={t:0,a,h:pB.length};p.kickN=(p.kickN|0)+1;sfx("dash")}return}
  if(asc&&!p.onG&&!p.bkDash){const tg=G.aimT;if(tg&&bacAlive(tg)&&!(tg!==B&&tg.noAim)){const dx=tg.x+tg.w/2-(p.x+6),dy=tg.y+tg.h/2-(p.y+11);p.bacTarget=tg;if(Math.hypot(dx,dy)>tg.w/2+24){p.face=Math.sign(dx)||f;p.bkDash={tg,t:0};p.cd=0;sfx("dash");snd("slash",60,.8);return}}}
  if((p.running&&Math.abs(p.vx)>2.2)||(bacU(5)&&(p.dashT>0||G.t-(p.dashS??-999)<36))){const sk=bacU(5),far=sk&&G.t-(p.dashS??-999)<=5;p.rush={t:0,snake:sk?1:0,far:far?1:0};p.running=false;p.dashT=0;p.dashS=-999;sfx("dash");if(sk)snd("thunder",80,.5);return}
@@ -959,11 +957,13 @@ function drawBacFx(){
   ctx.lineCap="round";for(let i=0;i<7;i++){const an=(i/7)*6.283+q.rot,r0=R*.9,r1=R*(1.4+.3*((i*3)%2));line(Math.cos(an)*r0,Math.sin(an)*r0,Math.cos(an)*r1,Math.sin(an)*r1,col,2*(1-k)+.5)}ctx.restore()}
 for(const q of quakeRings){const k=q.t/26;ctx.globalAlpha=(1-k)*.8;ctx.strokeStyle="#fff2a0";ctx.lineWidth=3*(1-k)+1;ctx.beginPath();ctx.ellipse(q.x,q.y-2,q.R*k,10*k+3,0,0,6.283);ctx.stroke();ctx.globalAlpha=1}
  const p=P;if(!p||!bacOn()||G.dead)return;
- if(p.ascT>0){const cx=p.x+6,cy=p.y+4,fy=p.y+p.h-1,phase=G.t*.075;ctx.save();ctx.globalCompositeOperation="lighter";
-   // Vòng lôi lực nằm ngang ôm sát oval dưới chân, không phải vòng tròn quanh thân.
-   ctx.globalAlpha=.72;ctx.strokeStyle=G.t%18<9?"#9fe8ff":"#ffe27a";ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(cx,fy,23+Math.sin(phase)*2,5.5,0,0,6.283);ctx.stroke();
-   ctx.globalAlpha=.42;ctx.lineWidth=1.2;ctx.beginPath();ctx.ellipse(cx,fy,16+Math.sin(phase+1)*1.5,3.4,0,0,6.283);ctx.stroke();
-   ctx.globalAlpha=1;for(let k=0;k<3;k++){if((G.t+k*5)%9>5)continue;ctx.strokeStyle=k%2?"rgba(160,230,255,.9)":"rgba(255,226,122,.95)";ctx.lineWidth=1.3;ctx.beginPath();let x=cx+rnd(-12,12),y=cy-18+rnd(-4,4);ctx.moveTo(x,y);for(let q=0;q<5;q++){x+=rnd(-6,6);y+=rnd(4,8);ctx.lineTo(x,y)}ctx.stroke()}ctx.restore()}
+ if(p.ascT>0){const cx=p.x+6,fy=p.y+p.h-1,phase=G.t*.075;ctx.save();ctx.globalCompositeOperation="lighter";
+   // Hào quang bám sát mặt đất: oval thật bẹt, không dựng thành vòng quanh thân.
+   ctx.globalAlpha=.16;ctx.fillStyle="#9fe8ff";ctx.beginPath();ctx.ellipse(cx,fy+1,29,4.2,0,0,6.283);ctx.fill();
+   ctx.globalAlpha=.78;ctx.strokeStyle=G.t%18<9?"#9fe8ff":"#ffe27a";ctx.lineWidth=1.8;ctx.beginPath();ctx.ellipse(cx,fy,28+Math.sin(phase)*1.5,3.2,0,0,6.283);ctx.stroke();
+   ctx.globalAlpha=.48;ctx.strokeStyle="#ffffff";ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(cx,fy,20+Math.sin(phase+1)*1.2,2,0,0,6.283);ctx.stroke();
+   // Các tia điện thấp sát nền, chỉ lóe quanh viền hào quang.
+   ctx.globalAlpha=.8;for(let k=0;k<4;k++){if((G.t+k*4)%10>5)continue;const x0=cx+[-22,-8,9,23][k];ctx.strokeStyle=k%2?"#9fe8ff":"#ffe27a";ctx.lineWidth=1.1;ctx.beginPath();ctx.moveTo(x0,fy);ctx.lineTo(x0+rnd(-3,3),fy-3-rnd(0,2));ctx.lineTo(x0+rnd(-4,4),fy-1);ctx.stroke()}ctx.restore()}
  if(bacLv()>=3&&!(p.ascT>0)&&(p.rage||0)>0){const k=(p.rage||0)/BACN;ctx.globalAlpha=.15+.35*k;ell(p.x+6,p.y+p.h-1,10+k*6,3,"#ffe27a");ctx.globalAlpha=1}}
 // cập nhật các đạn đặc biệt của bác (gọi trong vòng pB)
 function bacBullet(b){if(b.bac&&b.hit){const n=b.hit.size;if(n>(b.hn|0)){if(b.claw)for(const e of b.hit)if(!b.sk||!b.sk.has(e)){(b.sk=b.sk||new Set()).add(e);bacBolt(e)}if(b.pmk)for(const e of b.hit)if(!b.pk||!b.pk.has(e)){(b.pk=b.pk||new Set()).add(e);if(e!==B&&["turret","seal","barrel","boulder","tlseg","tlong"].includes(e.t))continue;if(e!==B&&e.dead){bacCorpse(e,P.face*9.5,-3.2);continue}const f=P.face;if(e===B){if(!B.d.tasu)bacKn.push({e,vx:f*6,vy:0,t:14})}else{bacKn.push({e,vx:f*9.5,vy:-3.2,t:150,fly:1});e.pmkFly=1;e.pmkDir=f;e.vy=0}shake(5);sfx("big")}b.hn=n;const f=P.face,pw=b.panHit||b.shockB||b.chg?3:(b.punch===3||b.punch===7||b.punch===9||b.punch===10||b.kick||b.rush||b.dfist)?2:1;bacImpact(b.x+b.w/2+f*b.w*.25,b.y+b.h/2,pw,f);if(b.launch)for(const e of b.hit)if(e!==B&&e.dead&&!e.corpse&&!(b.lset&&b.lset.has(e))&&!["turret","seal","barrel","boulder","tlseg","tlong"].includes(e.t)){(b.lset=b.lset||new Set()).add(e);bacCorpse(e,P.face*1.6,-6.5)}else if(e!==B&&!e.dead&&e.t!=="turret"&&!(b.lset&&b.lset.has(e))){(b.lset=b.lset||new Set()).add(e);e.vy=typeof b.launch==="number"?b.launch:-4.5;e.lift=20}}return false}
