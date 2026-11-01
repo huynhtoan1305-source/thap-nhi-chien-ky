@@ -818,7 +818,7 @@ function bacUpper(){const p=P;if(p.upT>0||(!p.onG&&(p.pmkUsed||p.tlqAir)))return
 function bacPhiMa(){const p=P;if(p.onG)return false;const tg=p.upc?p.upc.tg:p.upTg;p.upc=null;p.upWin=0;p.upTg=null;p.tlqAir=0;p.pmkUsed=1;
  if(tg&&bacAlive(tg)){const dx=tg.x+tg.w/2-(p.x+6);if(Math.abs(dx)>3)p.face=Math.sign(dx)}const f=p.face,asc=bacAsc(),cl=p.claw>0;if(cl)p.claw--;
  if(tg&&tg!==B&&bacAlive(tg))tg.stun=Math.max(tg.stun||0,20);
- const sp=bacU(2)?1.4:1,pw=Math.round(7/sp),pd=Math.round(21/sp);p.pDurK=10;p.pDur=pd;p.punchT=pd;p.punchK=10;p.cd=pd;p.vy=Math.min(p.vy,-1.2);p.vx=0;p.pmkT=pw+10;p.pmkW=pw;p.shootT=pd;sfx("dash");
+ const sp=bacU(2)?1.5:1,pw=Math.round(7/sp),pd=Math.round(21/sp);p.pDurK=10;p.pDur=pd;p.punchT=pd;p.punchK=10;p.cd=pd;p.vy=Math.min(p.vy,-1.2);p.vx=0;p.pmkT=pw+10;p.pmkW=pw;p.shootT=pd;sfx("dash");
  queue.push({t:pw,fn:()=>{if(P.punchK!==10||!(P.punchT>0)||G.dead)return;const dy=tg&&bacAlive(tg)?clamp(tg.y+tg.h/2-(P.y+11),-40,0):-14;
   pB.push(bacHB({ax:24,ay:dy*.6-8,w:50,h:42,dmg:bacBase()+2+(asc?1:0)+(cl?1:0),life:10,kbx:0,punch:10,pmk:1,claw:cl?1:0,stunHit:30}));snd("slash",60,.7)}});return true}
 function bacSolidBelow(o,n){const y0=Math.floor((o.y+o.h)/T);for(let ty=y0;ty<Math.min(ROWS,y0+n);ty++)for(let tx=Math.floor(o.x/T);tx<=Math.floor((o.x+o.w-.01)/T);tx++)if(L.g[ty]&&L.g[ty][tx]===1)return true;return false}
@@ -834,7 +834,7 @@ function bacTiger(big,combo){const p=P,f=p.face,base=bacBase(),asc=bacAsc(),g=ba
  p.punchT=bacDur(4);p.punchK=4;p.lock=10;p.vx=0;p.shootT=12;sfx("big");snd("drum",100,.8);shake(big?7:4);bacImpact(p.x+6+f*22,p.y+10,big?3:2,f)}
 function bacDur(k){if(P&&P.pDurK===k&&P.pDur)return P.pDur;return k===10?21:k===9?14:k===7?11:k===8?14:k===4||k===5?13:k===3?9:7}
 const BCT=[null,{w:4,d:16,cd:18},{w:4,d:18,cd:21},{w:7,d:24,cd:27},{w:8,d:30,cd:36}],BCM=2.5,BCS=27;
-function bacCombo(){const p=P,f=p.face,asc=bacAsc(),base=bacBase(),lv=bacLv();if(asc&&!p.onG){const tg=(p.bacTarget&&bacAlive(p.bacTarget))?p.bacTarget:G.aimT;if(!tg||!bacAlive(tg)||tg!==B&&tg.noAim){sfx("hit");return}p.bacTarget=tg}const n=p.bzT>0?p.bz%4+1:1,T1=BCT[n],sp=bacU(2)?1.4:1,T0={w:Math.round(T1.w/sp),d:Math.round(T1.d/sp),cd:Math.round(T1.cd/sp)};p.bz=n;p.bzT=T0.cd+30;
+function bacCombo(){const p=P,f=p.face,asc=bacAsc(),base=bacBase(),lv=bacLv();if(asc&&!p.onG){const tg=(p.bacTarget&&bacAlive(p.bacTarget))?p.bacTarget:G.aimT;if(!tg||!bacAlive(tg)||tg!==B&&tg.noAim){sfx("hit");return}p.bacTarget=tg}const n=p.bzT>0?p.bz%4+1:1,T1=BCT[n],sp=bacU(2)?1.5:1,T0={w:Math.round(T1.w/sp),d:Math.round(T1.d/sp),cd:Math.round(T1.cd/sp)};p.bz=n;p.bzT=T0.cd+30;
  if(asc&&n===4){bacPalm();p.pDurK=0;p.punchT=bacDur(5);p.punchK=5;p.cd=30;p.shootT=12;p.vx=0;return}
  const cl=p.claw>0;if(cl)p.claw--;
  if((asc||lv>=3)&&!p.onG){p.vy=Math.min(p.vy,-1.1);p.vx*=.3}const k=n===3?7:n===4?3:n;p.pDurK=k;p.pDur=T0.d;p.punchT=T0.d;p.punchK=k;p.cd=T0.cd;p.shootT=T0.d;p.bstepF=n>=3?(n===4?8:7):6;
