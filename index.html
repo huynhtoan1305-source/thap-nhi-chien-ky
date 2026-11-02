@@ -586,7 +586,7 @@ const BAC2STORY=[["","Tám nơi trấn yểm đã được giải. Trong chiếc
 const BAC3DLG=[["","Hắc Hóa Hộ Sơn tan thành bụi sáng, để lại một chiếc rương cũ. Bác mở ra: bên trong là nửa còn lại của dấu ấn đá, văn phù vẫn còn hơi ấm."],["@","(Hai mảnh đá ghép khít vào nhau, văn phù sáng rực.) Ấn Hộ Sơn..."],["@","Tui nhớ rồi. Gần một năm trước, tui là người giữ núi này. Đêm đó tui chặn Tà Sư ngay chân đàn tế."],["@","Lão đánh tui rơi xuống vực. Tui thoát chết, trôi dạt về thành phố, nhưng ký ức và sức mạnh thì bỏ lại hết trên đỉnh núi này."],["@","Làm bảo vệ cổng chung cư mấy chục tháng... hóa ra tay vẫn nhớ việc canh giữ, chỉ có đầu là quên."],["@","Lần này tui không quên nữa. Lôi Long, Bạch Hổ... THỨC TỈNH!"]];
 const KIMDLG=[["@","Đỉnh Ngũ Thạch Sơn... Tim tui đập mạnh, như có ai giống hệt mình đang chờ ở đây."],["@","Mảnh dấu ấn trong túi nóng ran. Nửa còn lại chắc ở quanh đây. Dẹp bớt đám âm binh đã."]];
 const CLONEDLG=[["Hắc Hóa Hộ Sơn","Quên rồi sao, Hộ Sơn? Ta là phần sức mạnh ngươi bỏ lại trên đỉnh núi này, cái đêm ngươi gục trước Tà Sư."],["@","Hộ Sơn... Vậy thì để tui lấy lại chính mình."]];
-const BACUP=[[],["Bác thấy người nhẹ hẳn, hơi thở sâu hơn.","Quyền cước của Bác giờ nhá ánh trắng vàng.","S · Long Quyền: giữ S tụ khí, đấm xiên xuống, đáp đất hất tung kẻ địch nửa màn hình."],["Sức mạnh tiềm ẩn thức tỉnh: Lôi Long Bạch Hổ.","A · Hổ Trảo – Lôi Bão: bão lôi quanh người 5 giây, đánh liên tục, đẩy lùi và xóa đạn.","Đủ 40 Nộ khí: nhấn A kích hoạt Ẩn Lực trong 20 giây; Hổ Trảo – Lôi Bão được duy trì suốt thời gian này.","S · Long Quyền giữ nguyên. Khi Ẩn Lực, X bay đến mục tiêu đang aim; tiếp tục nhấn X để nối combo trên không."]];
+const BACUP=[[],["Bác thấy người nhẹ hẳn, hơi thở sâu hơn.","Quyền cước của Bác giờ nhá ánh trắng vàng.","S · Long Quyền: giữ S tụ khí, đấm xiên xuống, đáp đất hất tung kẻ địch nửa màn hình."],["Sức mạnh tiềm ẩn thức tỉnh: Lôi Long Bạch Hổ.","A · Hổ Trảo – Lôi Bão: bão lôi quanh người 5 giây, đánh liên tục, đẩy lùi và xóa đạn.","Đủ 50 Nộ khí: nhấn A kích hoạt skin Lực Sĩ Bạch Hổ và Ẩn Lực trong 20 giây; Hổ Trảo – Lôi Bão được duy trì suốt thời gian này.","S · Long Quyền giữ nguyên. Khi Ẩn Lực, X bay đến mục tiêu đang aim; tiếp tục nhấn X để nối combo trên không."]];
 function bacLv(){if(!save.bac)return 1;return save.bacK?3:save.beaten.slice(0,8).every(Boolean)?2:1}
 function kimQuest(){return G.stage===12&&save.cls===3&&save.bac&&!save.bacK&&bacLv()>=2}
 function bacStageStart(){G.kimQ=0;G.kimChest=null;G.bac3Pend=0;G.kimK=0;G.kimN=0;G.kimC=null;G.kimDone=0;
@@ -718,7 +718,7 @@ function bacLoco(st){const a=st.anim||0;
  if(st.land>0)return bpSeq([[0,"guard"],[1,"land"]],clamp(st.land/5,0,1));
  if(st.run){let t=((st.rph!=null?st.rph:a*.38)*.8/6.2832)%1;if(t<0)t++;const ps=Object.assign({},bpSeq(RUNSEQ,t)),g1=heroGait(t,BGA,2.0),g2=heroGait(t+.5,BGA,2.0);ps.fh=g1[0];ps.fk=g1[1];ps.bh=g2[0];ps.bk=g2[1];ps.stL=t<.5?"f":"b";return ps}
  const b=Math.sin(a*.08);return Object.assign({},BP.guard,{hy:3+b*.6,fs:BP.guard.fs+b*.04,bs:BP.guard.bs-b*.04})}
-function drawBacFighter(x,y,face,ps,st={}){const lv=Math.min(2,st.lv||bacLv()),asc=st.fight&&bacAsc(),O="rgba(30,24,40,.16)",clone=st.clone;
+function drawBacFighter(x,y,face,ps,st={}){const asc=st.fight&&bacAsc(),lv=asc?3:Math.min(2,st.lv||bacLv()),O="rgba(30,24,40,.16)",clone=st.clone;
  const skin=clone?"#c89aa8":"#f2c08e",skinD=clone?"#9a6a7a":"#cf8f62",skinL=clone?"#e0b8c4":"#ffd9b0",shirt=lv>=3?null:(clone?"#8a6aa8":"#bcd8f0"),shirtD=clone?"#5a3a78":"#8fb0d8",pants=lv>=3?"#f4ecd0":(clone?"#3a1a3a":"#1e2a44"),pantsD=lv>=3?"#d8c890":(clone?"#2a0e2a":"#141c30"),shoe=lv>=3?"#c8a050":"#1b1b22";
  const bx=x+6,by=y+22,FS=BACFS;ctx.save();ctx.translate(bx,by);ctx.scale(face*FS,FS);ctx.lineCap="round";ctx.lineJoin="round";
  const LEG=11.5,ARM=9.6,TOR=15.5;
@@ -784,10 +784,10 @@ function drawFistFx(ex,ey,face,pr,big,lite){pr=clamp(pr,0,1);const lv=bacLv(),as
  ctx.restore()}
 
 /* ---------------- Bác Bảo Vệ ---------------- */
-const BACN=40;
+const BACN=50;
 function bacOn(){return save.cls===3}
 function bacBase(){return 2+.5*(bacLv()-1)+(bacU(0)?.5:0)}
-const BACUPL=[{m:2,n:"Bạch Hổ Khiếu",lines:["Hổ Quyền to hơn 25%, +1 sát thương.","Tốc đánh thường +40% (combo đấm và Phi Mã Cước)."]},
+const BACUPL=[{m:2,n:"Bạch Hổ Khiếu",lines:["Hổ Quyền to hơn 25%, +1 sát thương.","Tốc đánh thường +50% (combo đấm và Phi Mã Cước)."]},
  {m:5,n:"Xà Hình Bộ",lines:["Lao quyền bọc khí lôi xanh, lao ngang người, +1 sát thương.","Z rồi X: lao nhanh. Z + X cùng lúc: lao xa hơn, +1 sát thương."]},
  {m:6,n:"Phi Mã Cước",lines:["Tầm đấm cận chiến +25%.","Chảo Trứng hồi nhanh hơn 0,75 giây.","Cú cước trong combo +1 sát thương, tung thêm vầng trăng vàng xuyên quái."]}];
 function bacU(m){return !!(save.bacU&&save.bacU[m]&&BACUPL.some(u=>u.m===m))}
@@ -954,11 +954,12 @@ function drawBacFx(){
  if(p.storm>0&&p.ascT<=0){
   const cx=p.x+6,fy=p.y+p.h-1,t=G.t,beat=.5+.5*Math.sin(t*.24),life=Math.min(1,p.storm/18);
   ctx.save();ctx.globalCompositeOperation="lighter";
-  // Aura thuong cua Hổ Trảo – Lôi Bão: vòng khí xanh nhạt bám sát mặt đất dưới chân.
-  ctx.globalAlpha=(.28+.16*beat)*life;ctx.drawImage(glow("#68dfff",24),cx-31,fy-9,62,18);
-  ctx.globalAlpha=(.65+.2*beat)*life;ctx.strokeStyle="#bdf7ff";ctx.lineWidth=1.7;ctx.beginPath();ctx.ellipse(cx,fy+1,22+Math.sin(t*.17)*2,3.2+Math.sin(t*.2)*.4,0,0,6.283);ctx.stroke();
-  ctx.globalAlpha=.55*life;ctx.strokeStyle="#55cfff";ctx.lineWidth=1.1;ctx.beginPath();ctx.ellipse(cx,fy+1,29+Math.sin(t*.13)*2,4.8,0,0,6.283);ctx.stroke();
-  for(let q=0;q<5;q++){const x=cx+(q-2)*8+Math.sin(t*.16+q*1.7)*2,y=fy-5-((t*1.8+q*13)%20);ctx.globalAlpha=(.28+.12*(q%2))*life;ctx.fillStyle=q%2?"#65dfff":"#e8ffff";ctx.beginPath();ctx.ellipse(x,y,1.4,3.2,Math.sin(t*.12+q),0,6.283);ctx.fill()}
+  // Aura A thường: vòng buff xanh ngọc-trắng sát mặt đất, lõi vàng ấm; không dùng quầng tối.
+  ctx.globalAlpha=(.24+.13*beat)*life;ctx.drawImage(glow("#72efd5",25),cx-34,fy-10,68,20);
+  ctx.globalAlpha=(.72+.18*beat)*life;ctx.strokeStyle="#eaffff";ctx.lineWidth=1.8;ctx.beginPath();ctx.ellipse(cx,fy+1,22+Math.sin(t*.17)*2,3.1+Math.sin(t*.2)*.35,0,0,6.283);ctx.stroke();
+  ctx.globalAlpha=.48*life;ctx.strokeStyle="#70e8cf";ctx.lineWidth=1.15;ctx.beginPath();ctx.ellipse(cx,fy+1,29+Math.sin(t*.13)*2,4.7,0,0,6.283);ctx.stroke();
+  ctx.globalAlpha=(.24+.15*beat)*life;ctx.drawImage(glow("#ffe9a6",17),cx-15,fy-8,30,16);
+  for(let q=0;q<6;q++){const x=cx+(q-2.5)*7+Math.sin(t*.16+q*1.7)*2,y=fy-5-((t*1.7+q*11)%19);ctx.globalAlpha=(.30+.12*(q%2))*life;ctx.fillStyle=q%2?"#80f3dc":"#fff5cf";ctx.beginPath();ctx.ellipse(x,y,1.35,3.1,Math.sin(t*.12+q),0,6.283);ctx.fill()}
   ctx.restore();
  }
  if(p.ascT>0){
@@ -1479,7 +1480,7 @@ function drawGhost(g){if(!GHC){GHC=document.createElement("canvas");GHC.width=GH
  GHX.setTransform(1,0,0,1,0,0);GHX.globalCompositeOperation="source-in";GHX.fillStyle=save.cls===3&&P.ascT>0?"#9fe8ff":HERC[save.cls];GHX.fillRect(0,0,140,140);GHX.globalCompositeOperation="source-over";
  ctx.globalAlpha=Math.min(1,Math.max(0,g.a)*.62);ctx.drawImage(GHC,g.x-28,g.y-28,70,70);ctx.globalAlpha=1}
 function hb(o){if(P&&P.curLv===0&&o.dmg)o.dmg+=.5*NB();return Object.assign({melee:1,anchor:1,pierce:true,hit:new Set(),reflect:1,c:"#9fe8ff",x:0,y:0},o)}
-function skillList(){if(save.cls===3){const lv=bacLv(),asc=bacAsc();return[lv>=3?{n:asc?"Ẩn Lực · Lôi Bão":"Hổ Trảo – Lôi Bão",d:asc?"Ẩn Lực duy trì bão lôi trong 20 giây":"Bão lôi quanh người 5 giây; đủ 40 Nộ, A kích hoạt Ẩn Lực",cost:30,cd:420}:{n:"Trống",d:"Mở ở cấp 3",none:1,cost:0,cd:1},lv>=2?{n:"Long Quyền",d:"Giữ S tụ khí, đấm xuống hất tung",cost:30,cd:240}:{n:"Trống",d:"Mở ở cấp 2",none:1,cost:0,cd:1},(bacAsc()?{n:"Niệm Châu Luân",d:"Chuỗi hạt xoay boomerang, làm chậm",cost:20,cd:bacU(6)?105:150}:{n:"Chảo Trứng",d:"Ném chảo boomerang",cost:20,cd:bacU(6)?105:150})]}if(save.cls===2&&P&&P.mode==="spear"){const sp=HEROES[2].spear;return up2(2)?[sp[0],{n:"Tam Pháp Luân",d:"3 pháp luân Bát Chánh Đạo lao tới mục tiêu, kết liễu rơi thêm 1 máu",cost:30,cd:150},{n:"Kim Cang Chùy",d:"Mưa chùy cắm đất, đánh vào bật ra",cost:60,cd:300}]:sp}if(save.cls===2&&up2(2)){const sk=HEROES[2].skills.slice();sk[2]={n:"Phù Lôi Kiếm",d:"6 kiếm bùa đẩy quái ghim tường rồi nổ",cost:35,cd:120};return sk}if(save.cls===0&&(up2(0)||save.rigBroken)){const sk=HEROES[0].skills.slice();sk[2]=up2(0)?{n:"Nỏ Thần",d:"Liên Châu Thần Tiễn: nỏ bắn liên hoàn tên lửa 3 giây",cost:50,cd:300}:{n:"Pháo Hỏng",d:"Ụ pháo đã hỏng do quá tải",none:1,cost:0,cd:0};return sk}return HEROES[save.cls].skills}
+function skillList(){if(save.cls===3){const lv=bacLv(),asc=bacAsc();return[lv>=3?{n:asc?"Ẩn Lực · Lôi Bão":"Hổ Trảo – Lôi Bão",d:asc?"Ẩn Lực duy trì bão lôi trong 20 giây":"Bão lôi quanh người 5 giây; đủ 50 Nộ, A kích hoạt Ẩn Lực",cost:30,cd:420}:{n:"Trống",d:"Mở ở cấp 3",none:1,cost:0,cd:1},lv>=2?{n:"Long Quyền",d:"Giữ S tụ khí, đấm xuống hất tung",cost:30,cd:240}:{n:"Trống",d:"Mở ở cấp 2",none:1,cost:0,cd:1},(bacAsc()?{n:"Niệm Châu Luân",d:"Chuỗi hạt xoay boomerang, làm chậm",cost:20,cd:bacU(6)?105:150}:{n:"Chảo Trứng",d:"Ném chảo boomerang",cost:20,cd:bacU(6)?105:150})]}if(save.cls===2&&P&&P.mode==="spear"){const sp=HEROES[2].spear;return up2(2)?[sp[0],{n:"Tam Pháp Luân",d:"3 pháp luân Bát Chánh Đạo lao tới mục tiêu, kết liễu rơi thêm 1 máu",cost:30,cd:150},{n:"Kim Cang Chùy",d:"Mưa chùy cắm đất, đánh vào bật ra",cost:60,cd:300}]:sp}if(save.cls===2&&up2(2)){const sk=HEROES[2].skills.slice();sk[2]={n:"Phù Lôi Kiếm",d:"6 kiếm bùa đẩy quái ghim tường rồi nổ",cost:35,cd:120};return sk}if(save.cls===0&&(up2(0)||save.rigBroken)){const sk=HEROES[0].skills.slice();sk[2]=up2(0)?{n:"Nỏ Thần",d:"Liên Châu Thần Tiễn: nỏ bắn liên hoàn tên lửa 3 giây",cost:50,cd:300}:{n:"Pháo Hỏng",d:"Ụ pháo đã hỏng do quá tải",none:1,cost:0,cd:0};return sk}return HEROES[save.cls].skills}
 function spearFire(lv){if(P)P.curLv=lv;
  const p=P;
  if(lv===0&&p.cd>0){p.buf=10;return}
