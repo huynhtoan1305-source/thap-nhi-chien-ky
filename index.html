@@ -856,7 +856,7 @@ function bacTiger(big,combo){const p=P,f=p.face,base=bacBase(),asc=bacAsc(),g=ba
 function bacDur(k){if(P&&P.pDurK===k&&P.pDur)return P.pDur;return k===10?21:k===9?14:k===7?11:k===8?14:k===4||k===5?13:k===3?9:7}
 const BCT=[null,{w:4,d:16,cd:18},{w:4,d:18,cd:21},{w:7,d:24,cd:27},{w:8,d:30,cd:36}],BCM=2.5,BCS=27;
 function bacCombo(){const p=P,f=p.face,asc=bacAsc(),base=bacBase(),lv=bacLv();if(asc&&!p.onG){const tg=(p.bacTarget&&bacAlive(p.bacTarget))?p.bacTarget:G.aimT;if(tg&&bacAlive(tg)&&!(tg!==B&&tg.noAim))p.bacTarget=tg;else p.bacTarget=null}const n=p.bzT>0?p.bz%4+1:1,T1=BCT[n],sp=bacU(2)?1.5:1,T0={w:Math.round(T1.w/sp),d:Math.round(T1.d/sp),cd:Math.round(T1.cd/sp)};p.bz=n;p.bzT=T0.cd+30;
- if(asc&&n===4){bacPalm();bacTiger(false,1);p.pDurK=0;p.punchT=bacDur(5);p.punchK=5;p.cd=30;p.shootT=12;p.vx=0;return}
+ if(asc&&n===4){bacPalm();p.pDurK=0;p.punchT=bacDur(5);p.punchK=5;p.cd=30;p.shootT=12;p.vx=0;return}
  const cl=p.claw>0;if(cl)p.claw--;
  if((asc||lv>=3)&&!p.onG){p.vy=Math.min(p.vy,-1.1);p.vx*=.3}const k=n===3?7:n===4?3:n;p.pDurK=k;p.pDur=T0.d;p.punchT=T0.d;p.punchK=k;p.cd=T0.cd;p.shootT=T0.d;p.bstepF=n>=3?(n===4?8:7):6;
  const go=fn=>queue.push({t:T0.w,fn:()=>{if(P.punchK===k&&P.punchT>0&&!G.dead)fn()}});
@@ -865,7 +865,7 @@ function bacCombo(){const p=P,f=p.face,asc=bacAsc(),base=bacBase(),lv=bacLv();if
    if(ma)pB.push({hmoonP:1,x:P.x+6+f*22-12,y:P.y+4,w:24,h:22,vx:f*6.5,vy:0,ang:0,sc:.85,dmg:base*BCM,pierce:true,hit:new Set(),reflect:1,c:"#ffd34d",life:26,f});snd("slash",60,.6)});return}
  const big=n===4,rg=bacU(6)?1.25:1;
  go(()=>{if(cl)bacClaws.push({x:P.x+6+f*24,y:P.y+8,f,t:0});pB.push(bacHB({ax:(big?29:26)*rg,ay:n===2?-4:-5,w:(big?54:46)*rg,h:big?34:28,dmg:(base+(big?1.5:0)+(asc?1:0)+(cl?1:0))*BCM,life:big?9:7,kbx:big?22:3,punch:big?3:n,tigerFx:lv>=2&&big?1:0,claw:cl?1:0,stunHit:big?40:BCS}));
-  if(big){for(const e of ens)if(!e.dead&&e.t!=="turret"&&e.t!=="seal"&&Math.abs(e.x+e.w/2-(P.x+6+f*32))<34&&Math.abs(e.y+e.h/2-(P.y+11))<30)e.stun=Math.max(e.stun||0,40);bacTiger(false,1);shake(6)}
+  if(big){for(const e of ens)if(!e.dead&&e.t!=="turret"&&e.t!=="seal"&&Math.abs(e.x+e.w/2-(P.x+6+f*32))<34&&Math.abs(e.y+e.h/2-(P.y+11))<30)e.stun=Math.max(e.stun||0,40);shake(6)}
   sfx(big?"big":"shot")})}
 function bacPalm(){const p=P,f=p.face,x0=p.x+6+f*16,y0=p.y+8;let far=null,fd=0;
  for(const e of ens){if(e.dead||e.noAim||e.t==="barrel")continue;const dx=(e.x+e.w/2-x0)*f,dy=Math.abs(e.y+e.h/2-y0);if(dx>0&&dx<WVW*.5&&dy<34&&dx>fd){fd=dx;far=e}}
@@ -1093,7 +1093,7 @@ function lamLotusHit(b,e){if(!b||b.lotusBurst)return;b.lotusBurst=1;b.onHit=null
 function fire(lv){G.pf=1;try{fire0(lv)}finally{G.pf=0}}
 function fire0(lv){if(!atkGate(lv))return;if(P)P.curLv=lv;
  const p=P,cls=save.cls,f=p.face,fx=p.x+6+f*10,fy=p.y+11;
- const small=pB.filter(b=>b.small).length;if(cls===3)return bacFire(lv);if(cls===4)return tsFire(lv);
+ const small=pB.filter(b=>b.small).length;if(cls===3){if(lv===0&&!G.dead&&!(p.hp<=0)&&!(G.t-(p.tigT??-99)<7)){p.tigT=G.t;bacTiger(false,1)}return bacFire(lv)}if(cls===4)return tsFire(lv);
  if(cls===2){
   
   if(p.mode==="spear")return spearFire(lv);
