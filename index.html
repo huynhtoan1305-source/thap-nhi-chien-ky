@@ -202,7 +202,7 @@ const UPG=[{n:"Hỏa Tiễn Nhện Máy",d:"S: tên lửa bám quái, hóa nhệ
 const ACTS=["left","right","up","down","jump","shoot","dash","guard","nova","s1","s2","s3","start","back","chest","tab","mute","fs","set","sfxk","bks","skin","umap","kho"];
 const KEYMAP={ArrowLeft:"left",ArrowRight:"right",ArrowUp:["up","jump"],ArrowDown:"down",
  KeyV:"jump",Space:"jump",KeyX:"shoot",KeyZ:"dash",ShiftLeft:"dash",ShiftRight:"dash",KeyC:"guard",
- KeyA:"s1",KeyS:"s2",KeyD:"s3",Digit1:"s1",Digit2:"s2",Digit3:"s3",Enter:"start",Escape:"back",Backspace:["back","bks"],KeyB:"chest",KeyI:"skin",KeyY:"kho",KeyT:"chest",KeyQ:"tab",Tab:"tab",KeyM:"mute",KeyP:"fs",KeyO:"set",KeyN:"sfxk"};
+ KeyA:"s1",KeyS:"s2",KeyD:"s3",Digit1:"s1",Digit2:"s2",Digit3:"s3",Enter:"start",Escape:"back",Backspace:["back","bks"],KeyB:"chest",KeyI:"skin",KeyY:"kho",KeyT:"chest",KeyQ:"tab",Tab:"tab",KeyM:"mute",KeyP:"fs",KeyO:"set",KeyN:"sfxk",KeyU:"umap"};
 const kb={},tc={};let prevIn={},inp={},jp={},jr={};
 addEventListener("keydown",e=>{if(e.target&&e.target.tagName==="INPUT")return;const a=KEYMAP[e.code];if(a){[].concat(a).forEach(x=>kb[x]=true);e.preventDefault()}audioInit()});
 addEventListener("keyup",e=>{const a=KEYMAP[e.code];if(a)[].concat(a).forEach(x=>kb[x]=false)});
@@ -4075,7 +4075,7 @@ STORY[21]={"intro":[["","Cổng 4 · Mộ Cổ Ngoại Lai"]],"boss":[["Thiên S
 const t4Ch=()=>G.stage>=18&&G.stage<=21?G.stage-17:G.stage>=22&&G.stage<=24?4:0;
 const t4P=()=>G.stage===21||(G.stage>=22&&G.stage<=24);
 function t4Open(k){return !!save.diary&&(k===0||!!(save.t4&&save.t4[k-1]))}
-const T4H=()=>{const a=[4,0,1,2];if(save.bac)a.push(3);return a};
+const T4H=()=>{const a=[4,0,1,2];if(save.bac)a.push(3);if(save.kq)a.push(5);return a};
 function t4Pick(d){const n=T4H().length;G.t4h=(((G.t4h|0)+d)%n+n)%n;sfx("menu")}
 function t4Start(k){if(!t4Open(k)){sfx("hit");G.lockMsg=60;return}const h=T4H()[G.t4h|0]??4;if(!save.t4swap){save.t4prev=save.cls===4?(save.t4prev??0):save.cls}save.t4swap=1;save.cls=h;sfx("menu");const pre=T4PRE[k];if(k===3){const go=()=>{G.scene="t4hub";G.hubSel=G.hubSel|0;persist()};if(pre&&!save.t4pre)startDiaryLines(pre,()=>{save.t4pre=1;go()});else go();return}if(pre)startDiaryLines(pre,()=>startStage(18+k));else startStage(18+k)}
 function t4Restore(){if(save.t4swap||(save.cls===4&&!tsFull())){save.cls=save.t4prev??0;save.t4swap=0;persist()}}
@@ -4419,7 +4419,7 @@ function drawTier4(){const unl=!!save.diary,s4=G.sel4||0;
   if(unl&&!op){ctx.fillStyle="rgba(6,4,12,.7)";ctx.fillRect(x,y,NW,NHH);txt("KHÓA",x+NW/2,y+NHH/2,11,"#ffd34d","center",FD,700)}
   ctx.strokeStyle=sel?(G.t%20<10?"#ffd34d":"#fff"):"rgba(255,255,255,0)";ctx.lineWidth=sel?2:1;ctx.strokeRect(x+.5,y+.5,NW-1,NHH-1)});
  if(!unl){ctx.fillStyle="rgba(6,4,14,.7)";ctx.fillRect(NX-4,NY-4,5*NW+40,NHH+8);rrect(VW/2-140,NY+NHH/2-22,280,44,6,"rgba(23,16,48,.95)");ctx.strokeStyle="#ffd34d";ctx.lineWidth=1.5;ctx.strokeRect(VW/2-139.5,NY+NHH/2-21.5,279,43);drawBookIcon(VW/2-46,NY+NHH/2-1,G.lockMsg>0&&G.t%8<4);txt("????",VW/2+10,NY+NHH/2-6,14,G.lockMsg>0&&G.t%8<4?"#ff6a6a":"#ffd34d","center",FD,700);txt("Cứu Bạch Lan & đọc nhật ký ở Tầng 3",VW/2+10,NY+NHH/2+11,7,"#cfc8ee","center",FB,500,false);if(G.lockMsg>0)G.lockMsg--}
- else{const hh=T4H()[G.t4h|0]??4,nm=hh===4?"Thiên Sinh (Tà Sư thời trẻ)":HEROES[hh].name;txt("◀  Nhân vật: "+nm+"  ▶",VW/2,NY+NHH+15,10,"#ffd34d","center",FD,700);txt("↑ ↓ đổi nhân vật · ←→ chọn trang · Enter để vào",VW/2,NY+NHH+30,7.5,"#cfc8ee","center",FB,500,false)}}
+ else{const hh=T4H()[G.t4h|0]??4,nm=hh===4?"Thiên Sinh (Tà Sư thời trẻ)":HEROES[hh].name;txt("◀  Nhân vật: "+nm+"  ▶",VW/2,NY+NHH+15,10,"#ffd34d","center",FD,700);txt("U / ↑ ↓ đổi nhân vật · ←→ chọn trang · Enter để vào",VW/2,NY+NHH+30,7.5,"#cfc8ee","center",FB,500,false)}}
 
 HERC.push("#c77aff");
 // ---- Skin Tà Sư (thời trẻ) ----
@@ -6619,11 +6619,19 @@ function drawChar(){
  drawChestIcon();if(G.chest)drawChestPanel();
 }
 const CW=104,CH=62,GX=(VW-(4*CW+3*8))/2,GY=44;
+function mapCycleHero(){
+ if(G.tier===4&&(G.sel5|0)===0){save.cls=5;persist();sfx("menu");return}
+ const list=G.tier===3?T4H():[0,1,2,3,4,5].filter(c=>c!==3||save.bac).filter(c=>c!==4||tsFull()).filter(c=>c!==5||save.kq);
+ if(!list.length)return;
+ let i=list.indexOf(save.cls);if(i<0)i=0;const next=list[(i+1)%list.length];save.cls=next;
+ if(G.tier===3){const j=T4H().indexOf(next);if(j>=0)G.t4h=j}
+ persist();sfx("menu");
+}
 function updateSelect(){
  t4Restore();
  if(G.scene==="select"){if(G.tier===1&&phuCount()>=12&&!save.endSeen){save.endSeen=true;persist();startStory(MIDSTORY,()=>{G.scene="ending";G.t2=0},1);return}if(G.tier===2&&nhCount()>=5&&!save.t3Seen){save.t3Seen=1;persist();startStory(nhEndStory(NH[4].boss),()=>{G.scene="select"},2);return}}
  if(G.lockB&&G.lockB.t>0)G.lockB.t--;if(khoInput())return;if(wdInput())return;if(chestInput())return;
- G.tier=G.tier||0;G.sel2=G.sel2||0;
+ G.tier=G.tier||0;G.sel2=G.sel2||0;if(jp.umap){mapCycleHero();return}
  if(jp.tab){G.tier=(G.tier+1)%6;sfx("menu");return}
  if(click&&click.y<30&&click.x>8&&click.x<8+6*62){G.tier=clamp(Math.floor((click.x-8)/62),0,5);click=null;sfx("menu");return}
  if(G.tier===1){updateTier2();return}
@@ -6644,7 +6652,7 @@ function drawSelect(){
  drawMenuBG(G.tier>=1?"#0c0a14":"#120d24",G.tier===2?"#200a1a":G.tier===1?"#1a1020":"#1c2240");
  drawTabs();
  drawChestIcon();
- if(G.tier>=1){if(G.tier===5)drawTier6();else if(G.tier===4)drawTier5();else if(G.tier===3)drawTier4();else if(G.tier===2)drawTier3();else drawTier2();txt("Esc · đổi nhân vật · Q · đổi tầng · Hồ sơ: "+((META.list.find(q=>q.id===META.cur)||{}).name||""),GX,VH-10,8,"#8f88b5","left",FB,500,false);ctx.save();ctx.translate(VW-GX-20,VH-6);ctx.scale(.9,.9);drawHero(-6,-22,-1,save.cls,{anim:G.t});ctx.restore();if(G.chest)drawChestPanel();return}
+ if(G.tier>=1){if(G.tier===5)drawTier6();else if(G.tier===4)drawTier5();else if(G.tier===3)drawTier4();else if(G.tier===2)drawTier3();else drawTier2();txt("U · đổi nhân vật · Esc · chọn nhân vật · Q · đổi tầng · Hồ sơ: "+((META.list.find(q=>q.id===META.cur)||{}).name||""),GX,VH-10,8,"#8f88b5","left",FB,500,false);ctx.save();ctx.translate(VW-GX-20,VH-6);ctx.scale(.9,.9);drawHero(-6,-22,-1,save.cls,{anim:G.t});ctx.restore();if(G.chest)drawChestPanel();return}
  Z.forEach((d,i)=>{const c=i%4,r=i/4|0,x=GX+c*(CW+8),y=GY+r*(CH+8),sel=i===G.sel,done=save.beaten[i];
   const g=ctx.createLinearGradient(0,y,0,y+CH);g.addColorStop(0,d.sky[0]);g.addColorStop(1,d.sky[1]);rrect(x,y,CW,CH,6,g);
   ctx.save();ctx.beginPath();ctx.rect(x,y,CW,CH);ctx.clip();
@@ -6657,7 +6665,7 @@ function drawSelect(){
   if(save.phu&&save.phu[i]){ctx.save();ctx.translate(x+CW-12,y+CH-17);ctx.rotate(.12);rrect(-6,-10,12,20,1.5,"#ffe27a");ctx.strokeStyle="#c8202a";ctx.lineWidth=.7;ctx.strokeRect(-4.5,-8.5,9,17);txt("PHÙ",0,.5,5,"#c8202a","center",FD,800,false);ctx.restore()}
   ctx.strokeStyle=sel?(G.t%20<10?"#ffd34d":"#fff"):"rgba(255,255,255,.18)";ctx.lineWidth=sel?2.5:1;ctx.strokeRect(x+.5,y+.5,CW-1,CH-1)});
  const d=Z[G.sel];txt(`${d.boss} chờ ở ${d.stage}. Enter để vào màn.`,VW-GX-40,GY+3*(CH+8)+6,8,"#cfc8ee","right",FB,500,false,VW/2-GX-30);
- txt("Esc · đổi nhân vật · Q · đổi tầng · Hồ sơ: "+((META.list.find(q=>q.id===META.cur)||{}).name||""),GX,VH-10,8,"#8f88b5","left",FB,500,false);
+ txt("U · đổi nhân vật · Esc · chọn nhân vật · Q · đổi tầng · Hồ sơ: "+((META.list.find(q=>q.id===META.cur)||{}).name||""),GX,VH-10,8,"#8f88b5","left",FB,500,false);
  ctx.save();ctx.translate(VW-GX-20,VH-6);ctx.scale(.9,.9);drawHero(-6,-22,-1,save.cls,{anim:G.t});ctx.restore();
  if(G.chest)drawChestPanel();
 }
@@ -8709,7 +8717,7 @@ const T5SH=["Đêm trăng xanh. Dưới vách Ngũ Thạch Sơn, một vệt má
 
 /* ---------- lưu & vào màn ---------- */
 function t5Open(k){return tsFull()&&(k===0||!!(save.t5&&save.t5[k-1]))}
-function t5Start(k){if(k>4){sfx("hit");G.lockMsg5=60;return}if(!t5Open(k)){sfx("hit");G.lockMsg5=60;return}if(!(save.t5&&save.t5[k])){if(!save.t5swap){save.t5prev=save.cls;save.t5swap=1}save.cls=5}persist();sfx("menu");(k===2?dsCine({kind:"fire",title:"CHIỀU HÔM SAU · TRƯỚC CỬA HẦM",lines:T5PRE3,next:()=>startStage(28)}):dsCine({kind:"intro",lines:T5PRE[k],part:k,next:()=>startStage(26+k)}))}
+function t5Start(k){if(k>4){sfx("hit");G.lockMsg5=60;return}if(!t5Open(k)){sfx("hit");G.lockMsg5=60;return}if(k===0){save.cls=5;save.t5swap=0;save.t5prev=5}else{save.t5swap=0}persist();sfx("menu");(k===2?dsCine({kind:"fire",title:"CHIỀU HÔM SAU · TRƯỚC CỬA HẦM",lines:T5PRE3,next:()=>startStage(28)}):dsCine({kind:"intro",lines:T5PRE[k],part:k,next:()=>startStage(26+k)}))}
 const _t4R5=t4Restore;t4Restore=function(){_t4R5();if(save.t5swap){save.cls=save.t5prev??0;save.t5swap=0;persist()}if(save.cls===5&&!save.kq){save.cls=0;persist()}};
 const _ss5=startStage;startStage=function(i){G.t5x=null;G.ds1=null;G.dsArena=null;G.dsEnd=0;G.dsBush=null;G.dsGrp=null;G.dsCel=null;G.dsFx=[];G.kqW=[];G.dsCmp=null;_ss5(i);if(i===26||i===27){dsInit(i);t5xInit()}if(i===27){const cx=(L.W-11)*T;G.dsCel={x:cx,y:dsGroundTop(cx),st:-1,t:0,fx:cx-74}}else G.dsCel=null};
 function dsInit(i){const r=rng(9100+i*31),fi=L.arenas.find(a=>a.kind==="final"),mi=L.arenas.find(a=>a.kind==="mini");
@@ -8897,7 +8905,7 @@ const _prd5=petRowDraw;petRowDraw=function(d,lx,y,rw,t){if(d.cls!==5)return _prd
  if(petEvoOk(c))txt("Đủ! Enter để TIẾN HÓA",lx+34,y+46,5.6,"#ffd34d","left",FB,700,false,rw-38)};
 const _psd5=petSpDrop;petSpDrop=function(c,k,x,y){if(save&&save.cls===5){if(c===0&&k==="heart")c=5;else if(c===3&&k==="bat")c=5;else return}return _psd5(c,k,x,y)};
 const _pop5=petOnPick;petOnPick=function(k){_pop5(k);if(save.cls===5&&k&&k.th==="battery")petSpAdd(5,"bat",P.x+6,P.y-30)};
-const _jpp5=drawJPetPrev;drawJPetPrev=function(cls,x,y,t){if(cls===5){if(kOwn("pet5")){const lv=petLv(5),px=x-20,py=y-14;if(lv>=2){ctx.save();ctx.translate(px,py);ctx.scale(.62,.62);for(const q of kqPetSlots(2))drawKQSword(Math.cos(q.a)*q.r,-2+Math.sin(q.a)*q.r,q.a,q.L,1,q.L>=17);ctx.restore()}drawKQPet(px,py,t,1,lv,0,0)}return}return _jpp5(cls,x,y,t)};
+const _jpp5=drawJPetPrev;drawJPetPrev=function(cls,x,y,t){if(cls===5){if(kOwn("pet5")){const lv=petLv(5),px=x-20,py=y-14;if(lv>=2){ctx.save();ctx.translate(px,py);ctx.scale(.62,.62);for(const q of kqPetSlots(2))drawKQSword(Math.cos(q.a)*q.r,-2+Math.sin(q.a)*q.r,q.a,q.L,1,q.L>=17);ctx.restore()}drawKQSword(px,py,-.1,lv>=2?32:26,1,true)}return}return _jpp5(cls,x,y,t)};
 function kqPetGrant(){if(!save)return;kInit();if(kOwn("pet5"))return;if(save.kq||(G.scene==="stage"&&G.stage===27&&save.cls===5)){save.kown.pet5=1;try{persist()}catch(e){}if(G.scene==="stage"&&P)popup("NHẬN PET · KIẾM LINH CƠ GIÁP",P.x+6,P.y-40,"#ffd34d",8)}}
 /* ---- vẽ ---- */
 function drawKQSword(x,y,a,L,al,thr){ctx.save();ctx.translate(x,y);ctx.rotate(a);ctx.globalAlpha*=al==null?1:al;const w=L*.15,OL="rgba(14,12,20,.6)";
@@ -9005,26 +9013,36 @@ function kqPetSlots(lv){if(lv<2)return[[-.524,13,10],[-2.618,13,10],[.524,13,10]
  const S=[];for(const s of[-1,1]){S.push({a:s<0?Math.PI+.42:-.42,r:20,L:17});S.push({a:s<0?Math.PI+.06:-.06,r:19,L:14});S.push({a:s<0?Math.PI-.36:.36,r:17,L:13});S.push({a:s<0?Math.PI-.82:.82,r:15,L:11})}S.push({a:Math.PI/2,r:15,L:10});return S.map(q=>({a:q.a,r:q.r*KQPK,L:q.L*KQPK}))}
 const KQPK=1.2;
 function kqPetTick(){const p=P;if(!p||G.scene!=="stage"||save.cls!==5){G.kqPet=null;return}kqPetGrant();if(!kOwn("pet5")){G.kqPet=null;return}const lv=petLv(5);
- let Q=G.kqPet;if(!Q||Q.lv!==lv){Q=G.kqPet={x:p.x+6-p.face*22,y:p.y-12,f:p.face,lv,fightT:0,sw:kqPetSlots(lv).map((s,i)=>({i,s,st:"idle",x:p.x+6,y:p.y-12,a:s.a,cd:i*8,sc:0}))}}
+ let Q=G.kqPet;if(!Q||Q.lv!==lv){Q=G.kqPet={x:p.x+6-p.face*22,y:p.y-12,f:p.face,lv,fightT:0,pairCD:0,sw:kqPetSlots(lv).map((s,i)=>({i,s,st:"idle",x:p.x+6,y:p.y-12,a:s.a,cd:i*8,sc:0}))}}
  const pcx=p.x+6,pcy=p.y+6;let near=null,nd=1e9;for(const e of kqAll()){const c=kqC(e);if(Math.abs(c.x-pcx)<320&&Math.abs(c.y-pcy)<190){const d=Math.hypot(c.x-pcx,c.y-pcy);if(d<nd){nd=d;near=e}}}
  if(near||kqBossOk())Q.fightT=120;else if(Q.fightT>0)Q.fightT--;const fight=Q.fightT>0;Q.near=near;
  let tx=pcx-p.face*20,ty=p.y-14;if(fight&&near){const c=kqC(near),dP=Math.hypot(c.x-Q.x,c.y-Q.y);if(dP>100||Q.chase){Q.chase=dP>70;const dx=pcx-c.x,dy=pcy-c.y,dl=Math.hypot(dx,dy)||1;tx=c.x+dx/dl*80;ty=Math.min(c.y-24,c.y+dy/dl*80-10);const kx=tx-pcx,ky=ty-pcy,kl=Math.hypot(kx,ky);if(kl>180){tx=pcx+kx/kl*180;ty=pcy+ky/kl*180}}}else Q.chase=0;
- ty+=Math.sin(G.t*.05)*2;Q.vy=Q.vy||0;Q.vx=Q.vx||0;Q.vx+=(tx-Q.x)*.02;Q.vy+=(ty-Q.y)*.02;Q.vx*=.86;Q.vy*=.86;const sp=Math.hypot(Q.vx,Q.vy);if(sp>6.5){Q.vx*=6.5/sp;Q.vy*=6.5/sp}Q.x+=Q.vx;Q.y+=Q.vy;
- if(fight&&near&&!Q.chase)Q.f=Math.sign(kqC(near).x-Q.x)||Q.f;else if(Math.abs(Q.vx)>1.2)Q.f=Math.sign(Q.vx);else if(!fight)Q.f=p.face;
+ ty+=Math.sin(G.t*.05)*2;Q.vy=Q.vy||0;Q.vx=Q.vx||0;const SPX=kqPetSpecial(Q,p,near);if(!SPX){Q.vx+=(tx-Q.x)*.02;Q.vy+=(ty-Q.y)*.02;Q.vx*=.86;Q.vy*=.86;const sp0=Math.hypot(Q.vx,Q.vy);if(sp0>6.5){Q.vx*=6.5/sp0;Q.vy*=6.5/sp0}Q.x+=Q.vx;Q.y+=Q.vy}const sp=Math.hypot(Q.vx,Q.vy);
+ if(fight&&near&&!Q.chase)Q.f=Math.sign(kqC(near).x-Q.x)||Q.f;else if(Math.abs(Q.vx)>1.2)Q.f=Math.sign(Q.vx);else if(!fight)Q.f=p.face;if(SPX)Q.f=SPX.f||p.face;
  Q.sx=Q.sx==null?Q.f:Q.sx+clamp(Q.f-Q.sx,-.16,.16);Q.tilt=(Q.tilt||0)+(clamp(Q.vx*.1,-.5,.5)-(Q.tilt||0))*.15;
- if(sp>4.2&&!(Q.spinT>0)&&!(Q.spinCD>0)){Q.spinT=26;Q.spinCD=90;Q.spinD=Math.sign(Q.vx)||1}if(Q.spinCD>0)Q.spinCD--;if(Q.spinT>0)Q.spinT--;Q.spinA=Q.spinT>0?Q.spinD*6.283*(1-Math.pow(Q.spinT/26,2)):0;Q.t=(Q.t||0)+1;{const av=Math.abs(Q.vx),ok=Math.abs(Q.sx)>.85&&Math.sign(Q.vx)===Q.f;Q.side=Q.side?(av>.8&&ok):(av>1.6&&ok)}Q.sideK=(Q.sideK||0)+((Q.side?1:0)-(Q.sideK||0))*.25;
+ if(!SPX&&sp>4.2&&!(Q.spinT>0)&&!(Q.spinCD>0)){Q.spinT=26;Q.spinCD=90;Q.spinD=Math.sign(Q.vx)||1}if(Q.spinCD>0)Q.spinCD--;if(Q.spinT>0)Q.spinT--;Q.spinA=Q.spinT>0?Q.spinD*6.283*(1-Math.pow(Q.spinT/26,2)):0;Q.t=(Q.t||0)+1;{const av=Math.abs(Q.vx),ok=Math.abs(Q.sx)>.85&&Math.sign(Q.vx)===Q.f;Q.side=Q.side?(av>.8&&ok):(av>1.6&&ok)}Q.sideK=(Q.sideK||0)+((Q.side?1:0)-(Q.sideK||0))*.25;
 
- const dmg=(lv>=2?1.6:1.2)*petPdmg();let launched=0;
- const TF=kqPetTravel(lv);for(const w of Q.sw){const s=w.s;let hx=Q.x+Math.cos(s.a)*s.r*Q.f,hy=Q.y-2+Math.sin(s.a)*s.r,ha=Q.f>0?s.a:Math.PI-s.a;if(Q.side&&TF[w.i]){const q=TF[w.i];hx=Q.x+q[0]*Q.f;hy=Q.y+q[1];ha=Q.f>0?0:Math.PI}w.sc+=((fight?1:0)-w.sc)*.12;if(w.cd>0)w.cd--;
-  if(w.st==="idle"){w.x+=(hx-w.x)*.3;w.y+=(hy-w.y)*.3;{let da=ha-w.a;while(da>Math.PI)da-=6.283;while(da<-Math.PI)da+=6.283;w.a+=da*.3}if(fight&&w.sc>.9&&w.cd<=0&&!launched&&(G.t+w.i*5)%6===0){let tg=null,bd=1e9;for(const e of kqAll().filter(e=>!kqObj(e))){const c=kqC(e),d=Math.hypot(c.x-Q.x,c.y-Q.y);if(d<125&&d<bd){bd=d;tg=e}}if(tg){w.st="fly";w.tg=tg;w.v=1.5;w.t=0;launched=1;w.cd=120;w.set=new Set();if(AC&&!MUS.sfxOff&&kqGap("pw",120))kqWhoosh(1200,3200,.14,.05)}}}
-  else if(w.st==="fly"){w.t++;const ok=w.tg&&(w.tg===B?kqBossOk():!w.tg.dead&&!w.tg.corpse);if(!ok||w.t>90){w.st="ret";continue}const c=kqC(w.tg),ta=Math.atan2(c.y-w.y,c.x-w.x);let da=ta-w.a;while(da>Math.PI)da-=6.283;while(da<-Math.PI)da+=6.283;w.a+=clamp(da,-.22,.22);w.v=Math.min(6.5,w.v+.35);w.x+=Math.cos(w.a)*w.v;w.y+=Math.sin(w.a)*w.v;if(G.t%2===0)parts.push({x:w.x,y:w.y,vx:0,vy:0,life:8,c:"#9fe8ff",s:1.4});
-   const tipx=w.x+Math.cos(w.a)*s.L*.8,tipy=w.y+Math.sin(w.a)*s.L*.8,e=w.tg;if(tipx>e.x-3&&tipx<e.x+e.w+3&&tipy>e.y-3&&tipy<e.y+e.h+3){if(e===B){B.inv=0;damageBoss(dmg)}else{e.inv=0;hitEnemy(e,dmg,null,"pet")}kqImpact(tipx,tipy,1,Math.sign(Math.cos(w.a))||1);
-    let px0=c.x,py0=c.y;const used=[e];for(let k=0;k<3;k++){let nx=null,nd=70;for(const q of kqAll()){if(used.includes(q))continue;const cc=kqC(q),d=Math.hypot(cc.x-px0,cc.y-py0);if(d<nd){nd=d;nx=q}}if(!nx)break;used.push(nx);const cc=kqC(nx);kqBolt(px0,py0,cc.x,cc.y);if(nx===B){B.inv=0;damageBoss(dmg*.5)}else{nx.inv=0;G.noStun=1;hitEnemy(nx,dmg*.5,null,"pet");G.noStun=0;if(!nx.dead&&!kqHeavy(nx))nx.stun=Math.max(nx.stun||0,18)}px0=cc.x;py0=cc.y}
-    if(e!==B&&!e.dead&&!kqHeavy(e))e.stun=Math.max(e.stun||0,18);snd("spark",90,.35);if(AC&&!MUS.sfxOff&&kqGap("pz",150))kqZap(.12,.035);w.st="ret"}}
+ const dmg=(lv>=2?1.6:1.2)*petPdmg();if(Q.pairCD>0)Q.pairCD--;const pairReady=Q.pairCD<=0;let launched=0;const RNG=Q.rs==="ride"?300:125;
+ const TF=kqPetTravel(lv);for(const w of Q.sw){const s=w.s;let hx=Q.x+Math.cos(s.a)*s.r*Q.f,hy=Q.y-2+Math.sin(s.a)*s.r,ha=Q.f>0?s.a:Math.PI-s.a;if(Q.side&&TF[w.i]){const q=TF[w.i];hx=Q.x+q[0]*Q.f;hy=Q.y+q[1];ha=Q.f>0?0:Math.PI}if(Q.rs==="ride"||Q.rs==="cmd"&&Q.wasRide){const j=w.i,k=Math.floor(j/2)+1,sd=j%2?1:-1;hx=Q.x-Q.f*(k*9+6);hy=Q.y-6+sd*k*5+Math.sin(G.t*.2+j)*1.5;ha=Q.f>0?0:Math.PI}w.sc+=(((fight||Q.rs==="ride")?1:0)-w.sc)*.12;if(w.cd>0)w.cd--;if(w.st==="gone"){if(--w.rg<=0){w.st="idle";w.sc=0;w.x=Q.x;w.y=Q.y}continue}
+  if(w.st==="idle"){w.x+=(hx-w.x)*.3;w.y+=(hy-w.y)*.3;{let da=ha-w.a;while(da>Math.PI)da-=6.283;while(da<-Math.PI)da+=6.283;w.a+=da*.3}if(fight&&w.sc>.9&&w.cd<=0&&pairReady&&launched<2&&(G.t+w.i*5)%6===0){let tg=null,bd=1e9;if(Q.rs==="ride"){const a=kqAimPick(RNG);if(a&&!kqObj(a))tg=a}if(!tg)for(const e of kqAll().filter(e=>!kqObj(e))){const c=kqC(e),d=Math.hypot(c.x-Q.x,c.y-Q.y);if(d<RNG&&d<bd){bd=d;tg=e}}if(tg){w.st="fly";w.tg=tg;w.v=1.5;w.t=0;w.hitList=[];w.cd=120;launched++;if(launched>=2)Q.pairCD=120;w.set=new Set();if(AC&&!MUS.sfxOff&&kqGap("pw",120))kqWhoosh(1200,3200,.14,.05)}}}
+  else if(w.st==="fly"){
+   w.t++;let e=w.tg;const used=w.hitList||(w.hitList=[]);
+   const seek=()=>{let best=null,bd=175;const ux=Math.cos(w.a),uy=Math.sin(w.a);for(const q of kqAll()){if(used.includes(q))continue;const cc=kqC(q),dx=cc.x-w.x,dy=cc.y-w.y,forward=dx*ux+dy*uy,d=Math.hypot(dx,dy);if(forward>0&&d<bd){bd=d;best=q}}return best};
+   if(w.t>100){w.st="gone";w.rg=60;continue}
+   if(!e||(e===B?!kqBossOk():e.dead||e.corpse)||used.includes(e)){e=seek();w.tg=e}
+   if(e){const c=kqC(e),ta=Math.atan2(c.y-w.y,c.x-w.x);let da=ta-w.a;while(da>Math.PI)da-=6.283;while(da<-Math.PI)da+=6.283;w.a+=clamp(da,-.045,.045)}
+   w.v=Math.min(6.5,w.v+.28);w.x+=Math.cos(w.a)*w.v;w.y+=Math.sin(w.a)*w.v;
+   if(G.t%2===0)parts.push({x:w.x,y:w.y,vx:0,vy:0,life:8,c:"#9fe8ff",s:1.4});
+   if(e){const tipx=w.x+Math.cos(w.a)*s.L*.8,tipy=w.y+Math.sin(w.a)*s.L*.8;if(tipx>e.x-3&&tipx<e.x+e.w+3&&tipy>e.y-3&&tipy<e.y+e.h+3){
+    if(e===B){B.inv=0;damageBoss(dmg)}else{e.inv=0;hitEnemy(e,dmg,null,"pet");if(!e.dead&&!kqHeavy(e))e.stun=Math.max(e.stun||0,18)}
+    used.push(e);kqImpact(tipx,tipy,1,Math.sign(Math.cos(w.a))||1);snd("spark",90,.35);if(AC&&!MUS.sfxOff&&kqGap("pz",150))kqZap(.12,.035);
+    if(used.length>=3){w.st="gone";w.rg=60}else{w.tg=seek()}
+   }}
+  }
   else if(w.st==="ret"){const dx=hx-w.x,dy=hy-w.y,d=Math.hypot(dx,dy);let da=ha-w.a;while(da>Math.PI)da-=6.283;while(da<-Math.PI)da+=6.283;w.a+=da*.15;const v=Math.min(d,5.5);w.x+=dx/(d||1)*v;w.y+=dy/(d||1)*v;if(d<1.5){w.st="idle"}}}}
 function drawKQPetW(){const Q=G.kqPet;if(!Q||G.scene!=="stage"||save.cls!==5)return;const fight=Q.fightT>0;
- for(const w of Q.sw){const al=w.st==="idle"?w.sc:1;if(al<.03)continue;const L=w.s.L*(w.st==="idle"?.4+.6*w.sc:1);ctx.save();if(w.st!=="idle"){ctx.globalCompositeOperation="lighter";ctx.globalAlpha=.5;ctx.drawImage(glow("#6ac8ff",6),w.x-6,w.y-6,12,12);ctx.restore();ctx.save()}drawKQSword(w.x,w.y,w.a,L,al,Q.lv>=2&&w.s.L>=17||w.st==="fly");ctx.restore()}
- {const sx=Math.abs(Q.sx)<.18?.18*(Math.sign(Q.sx)||1):Q.sx,sp=Math.hypot(Q.vx||0,Q.vy||0);ctx.save();ctx.translate(Q.x,Q.y);ctx.rotate((Q.tilt||0)+(Q.spinA||0));{const pk=Q.lv>=2?KQPK:1;ctx.scale(sx*pk,pk)}const k=Q.sideK||0;if(k<.98){ctx.save();ctx.globalAlpha*=1-k;drawKQPet(0,0,Q.t||0,1,Q.lv,sp>1,fight,Math.min(.8,sp*.13));ctx.restore()}if(k>.02){ctx.save();ctx.globalAlpha*=k;drawKQPetSide(Q.t||0,Q.lv,sp>1,fight,Math.min(.8,sp*.13));ctx.restore()}ctx.restore()}}
+ for(const w of Q.sw){if(w.st==="gone")continue;const al=w.st==="idle"?w.sc:1;if(al<.03)continue;const L=w.s.L*(w.st==="idle"?.4+.6*w.sc:1);ctx.save();if(w.st!=="idle"){ctx.globalCompositeOperation="lighter";ctx.globalAlpha=.5;ctx.drawImage(glow("#6ac8ff",6),w.x-6,w.y-6,12,12);ctx.restore();ctx.save()}drawKQSword(w.x,w.y,w.a,L,al,Q.lv>=2&&w.s.L>=17||w.st==="fly");ctx.restore()}
+ kqMainSwordDraw(Q,fight)}
 const _kqT5=kqTick;kqTick=function(){_kqT5();try{kqPetTick()}catch(er){console.error(er)}};
 function drawKQBack(){if(G.scene!=="stage"||!P||save.cls!==5)return;try{drawKQPetW()}catch(er){console.error(er)}
  {const n=P.kqRune|0;G.kqRIn=(G.kqRIn||[]).filter(q=>++q.t<20);for(const q of G.kqRIn){const u=q.t/20;ctx.save();ctx.globalCompositeOperation="lighter";ctx.globalAlpha=1-u*.5;ctx.drawImage(glow("#6ac8ff",5),q.x+(P.x+6-q.x)*u-5,q.y+(P.y+4-q.y)*u-5,10,10);ctx.restore()}
@@ -10232,15 +10250,15 @@ function kqPlasma(x,y,r,t,sd){const h=n=>{const v=Math.sin(n*127.1+311.7)*43758.
  ctx.strokeStyle="rgba(255,255,255,.28)";ctx.lineWidth=Math.max(.6,r*.05);ctx.beginPath();ctx.arc(x,y,r*.8,.35,1.05);ctx.stroke();
  ctx.restore()}
 /* Giữ trên không như kiếm Phong: mỗi lần tung luân trên không treo ~18 khung (3 lần đầu), sau đó rơi chậm (sfall) tới khi chạm đất */
-function kqAirHang(p){p.jxN=(p.jxN|0)+1;p.vy=0;p.hang=p.jxN>=4?0:18;p.sfall=1;p.airDashing=false}
+function kqAirHang(p){p.jxN=(p.jxN|0)+1;p.vy=0;p.hang=p.jxN>=4?0:36;p.sfall=1;p.airDashing=false}
 {const _kqFH=kqFire;kqFire=function(lv){const p=P,W=G.kqW||[],l0=W[W.length-1],tb0=!!(p&&p.kqTBc>0);_kqFH(lv);if(!p||save.cls!==5||!kqBK()||p.onG||lv)return;const W1=G.kqW||[],l1=W1[W1.length-1];if((l1&&l1!==l0&&l1.m==="air")||(!tb0&&p.kqTBc>0))kqAirHang(p)}}
-function kqVX3Go(p){kqAirHang(p);p.kqVXs=2;p.kqVXt=-99;p.kqVX3Q=0;p.kqTBc=20;p.vy=Math.min(p.vy,-1.2);p.kqArm=20;sfx("charge")}
+function kqVX3Go(p){kqAirHang(p);p.kqVXs=2;p.kqVXt=-99;p.kqVX3Q=0;p.kqTBc=60;p.hang=60;p.sfall=0;p.vy=0;p.kqArm=20;sfx("charge")}
 const _kqT9=kqTick;kqTick=function(){_kqT9();const p=P;if(!p||G.scene!=="stage"||save.cls!==5||!kqBK())return;const t=G.t;
  // VX3 xếp hàng: đợi luân hit 1 + hit 2 thu về tay rồi mới gồng cầu
  if(p.kqVX3Q>0){p.kqVX3Q--;if(p.onG)p.kqVX3Q=0;else if(!(p.kqTBc>0)&&!kqBusyN(0)&&!kqBusyN(1))kqVX3Go(p)}
  // VX3: tay còn lại gồng lôi cầu
- if(p.kqTBc>0){p.kqTBc--;p.vy=Math.min(p.vy,.4);const H=kqHand(0);if(t%2===0)parts.push({x:H.x+rnd(-10,10),y:H.y+rnd(-10,10),vx:0,vy:0,life:10,c:"#bfe8ff",s:1.6});
-  if(p.kqTBc===0){const tg=kqAimPick(230);kqAimFace(tg);const c=tg?kqC(tg):{x:p.x+6+p.face*110,y:(kqGroundY(p.x+6+p.face*110,p.y)||p.y+60)-14};(G.kqFx2=G.kqFx2||[]).push({k:"tb",x:H.x,y:H.y,tx:c.x,ty:c.y,tg,t:0});sfx("dash")}}
+ if(p.kqTBc>0){if(p.kqTBc===1&&inp.shoot&&(p.kqHold|0)<300&&!p.onG){p.kqHold=(p.kqHold|0)+1;p.hang=Math.max(p.hang|0,3);p.sfall=1;p.vy=0}else{p.kqTBc--;p.kqHold=0}p.vy=0;p.hang=Math.max(p.hang|0,2);p.sfall=0;const H=kqHand(0);if(t%2===0)parts.push({x:H.x+rnd(-10,10),y:H.y+rnd(-10,10),vx:0,vy:0,life:10,c:"#bfe8ff",s:1.6});
+  if(p.kqTBc===0){p.hang=0;const tg=kqAimPick(230);kqAimFace(tg);const c=tg?kqC(tg):{x:p.x+6+p.face*110,y:(kqGroundY(p.x+6+p.face*110,p.y)||p.y+60)-14};(G.kqFx2=G.kqFx2||[]).push({k:"tb",x:H.x,y:H.y,tx:c.x,ty:c.y,tg,t:0});sfx("dash")}}
  // ZX giữ X
  const Z=p.kqZH;if(Z){if(inp.shoot&&Z.t<60){Z.t++;const k=Z.t/60;if(Z.w&&!Z.w.done){Z.w.sc=Z.sc*(1+k*.9)}if(t%2===0){const q=Z.w&&!Z.w.done?Z.w:{x:p.x+6+p.face*30,y:p.y+8};parts.push({x:q.x+rnd(-14,14)*(1+k),y:q.y+rnd(-14,14)*(1+k),vx:0,vy:0,life:10,c:k>.7?"#ffffff":"#9fe8ff",s:1.8})}if(Z.t===30)sfx("charge")}
   else{if(Z.t>=8){const q=Z.w&&!Z.w.done?{x:Z.w.x,y:Z.w.y}:{x:p.x+6+p.face*60,y:p.y+8};const k=Z.t/60;kqBlast(q.x,q.y,30+k*34,2.4+k*5,40+Math.round(k*40),0);(G.kqFx2=G.kqFx2||[]).push({k:"wheel",x:q.x,y:q.y,t:0,s:1+k*1.4});popup(k>=1?"TÁN LUÂN · CỰC ĐẠI":"TÁN LUÂN",q.x,q.y-30,"#9fe8ff",7);if(Z.w)Z.w.done=1}p.kqZH=null}}
@@ -10301,6 +10319,44 @@ function kqMWDraw(m){const r=m.r,t=G.t;ctx.save();ctx.globalCompositeOperation="
  if(m.ph===1){ctx.strokeStyle="#ffffff";ctx.lineWidth=1.4;for(let k=0;k<3;k++){ctx.globalAlpha=.7;ctx.beginPath();for(let j=0;j<=24;j++){const u=j/24,a=m.rot*1.2+k*2.094+u*4.2,rr=r*(1.9-u*1.2);const px=m.x+Math.cos(a)*rr,py=m.y+Math.sin(a)*rr;j?ctx.lineTo(px,py):ctx.moveTo(px,py)}ctx.stroke()}}
  ctx.restore();drawKQWheel(m.x,m.y,r,m.rot,kqLook(),true)}
 {const _dk=drawKQW;drawKQW=function(){_dk();if(G.scene!=="stage"||!P||save.cls!==5)return;for(const m of G.kqMW||[])kqMWDraw(m)}}
+
+/* ===== Kiếm pet: thân pet là thanh kiếm lớn; Kiếm Lệnh (chiêu S nâng cấp); cưỡi kiếm (pet cấp 2) ===== */
+function kqPetSpecial(Q,p,near){
+ const lv=Q.lv,pcx=p.x+6;Q.gh=(Q.gh||[]).filter(g=>++g.t<14);Q.stCD=Math.max(0,(Q.stCD|0)-1);if(p.kqSwT>0)p.kqSwT--;
+ Q.calmT=Q.fightT>0?0:(Q.calmT|0)+1;Q.zh=inp.dash?((Q.zh|0)+1):0;
+ const L0=Q.L||30;
+ if(Q.rs==="cmd"){const e=Q.tgt;if(!e||(e===B?!kqBossOk():(e.dead||e.corpse))||(Q.ct|0)>70){Q.rs=0;Q.wasRide=0;return null}
+  Q.ct=(Q.ct|0)+1;const c=kqC(e),dx=c.x-Q.x,dy=c.y-Q.y,d=Math.hypot(dx,dy)||1,v=Math.min(d,Q.big?18:15);Q.vx=dx/d*v;Q.vy=dy/d*v;Q.x+=Q.vx;Q.y+=Q.vy;Q.aimA=Math.atan2(dy,dx);Q.gh.push({x:Q.x,y:Q.y,a:Q.aimA,t:0});
+  const tx=Q.x+Math.cos(Q.aimA)*L0*.8,ty=Q.y+Math.sin(Q.aimA)*L0*.8;
+  if(tx>e.x-5&&tx<e.x+e.w+5&&ty>e.y-5&&ty<e.y+e.h+5){const dm=(Q.big?6:3.4)*petPdmg();if(e===B){B.inv=0;damageBoss(dm)}else{e.inv=0;hitEnemy(e,dm,null,"pet");if(!e.dead&&!kqHeavy(e))e.stun=Math.max(e.stun||0,Q.big?30:16)}kqImpact(tx,ty,Q.big?3:2,Math.sign(Math.cos(Q.aimA))||1);snd("spark",90,.4);Q.rs=0;Q.wasRide=0;Q.stCD=Q.big?30:12;Q.vx*=.3;Q.vy*=.3}
+  return{f:Math.sign(dx)||Q.f}}
+ if(Q.rs==="wait"){const cancel=inp.left||inp.right||jp.shoot||jp.s1||jp.s2||jp.s3||inp.guard||G.dead||G.dlg||Q.fightT>0||(Q.wt=(Q.wt|0)+1)>360;
+  if(jp.jump){Q.rs="ride";Q.rt=0;p.rvx=0;p.rvy=0;if(!boxHit(p.x+p.face*10,p.y-6,p.w,p.h))p.x+=p.face*10;p.y-=4;sfx("dash");return{f:p.face}}
+  if(cancel){Q.rs=0;return null}
+  Q.x+=(pcx+p.face*26-Q.x)*.25;Q.y+=(p.y+p.h-1-Q.y)*.25;Q.vx=Q.vy=0;return{f:p.face}}
+ if(Q.rs==="ride"){if(G.dead||G.dlg){Q.rs=0;return null}
+  const ax=(inp.right?1:0)-(inp.left?1:0),ay=(inp.down?1:0)-(inp.up?1:0),sp=inp.dash?4.8:2.5;p.rvx=(p.rvx||0)+(ax*sp-(p.rvx||0))*.18;p.rvy=(p.rvy||0)+(ay*sp*.8-(p.rvy||0))*.18;if(ax)p.face=ax;
+  const nx=p.x+p.rvx;if(!boxHit(nx,p.y,p.w,p.h))p.x=nx;else p.rvx=0;const ny=p.y+p.rvy;if(!boxHit(p.x,ny,p.w,p.h))p.y=ny;else p.rvy=0;
+  p.vx=0;p.vy=0;p.onG=false;p.sfall=1;p.hang=0;
+  Q.x+=((p.x+6-p.face*10)-Q.x)*.6;Q.y+=((p.y+p.h+3.5)-Q.y)*.6;Q.vx=p.rvx;Q.vy=p.rvy;Q.fightT=120;Q.rt++;
+  if(inp.dash&&G.t%2===0)Q.gh.push({x:Q.x,y:Q.y,a:Q.f>0?0:Math.PI,t:0});
+  if(Q.rt>8&&(((G.t-(G.kqVt||-9))<=2)||(jp.jump&&!inp.up))){const e=inp.dash?kqAimPick(320):null;if(e&&(kqC(e).x-pcx)*p.face>-20){Q.rs="cmd";Q.tgt=e;Q.ct=0;Q.big=1;Q.wasRide=1;p.vy=-3.5;p.vx=p.face*1.2;sfx("charge")}else{Q.rs=0;p.vy=-4}p.hang=0;p.rvx=p.rvy=0}
+  return{f:p.face}}
+ if(lv>=2&&Q.calmT>=420&&Q.zh>=25&&p.onG&&!G.dlg&&!G.dead&&!Q.rs){Q.rs="wait";Q.wt=0;popup("NHẤN V ĐỂ LÊN KIẾM",p.x+6,p.y-22,"#9fe8ff",7)}
+ return null}
+addEventListener("keydown",e=>{if((e.code==="KeyV"||e.code==="Space")&&!e.repeat)G.kqVt=G.t});
+function kqSwordCmd(){const p=P,Q=G.kqPet;if(!p||!Q||save.cls!==5||!kqBK()||!(p.kqSwT>0)||Q.rs||(Q.stCD|0)>0)return;const e=kqAimPick(300);if(!e)return;Q.rs="cmd";Q.tgt=e;Q.ct=0;Q.big=0;Q.wasRide=0}
+function kqMainSwordDraw(Q,fight){const p=P;const rd=Q.rs==="ride"||Q.rs==="wait",Lt=rd?46:(Q.lv>=2?32:26);Q.L=(Q.L||Lt)+(Lt-(Q.L||Lt))*.12;const L=Q.L;
+ for(const g of Q.gh||[]){ctx.save();ctx.globalCompositeOperation="lighter";drawKQSword(g.x,g.y,g.a,L,(1-g.t/14)*.4,true);ctx.restore()}
+ let want;if(Q.rs==="cmd")want=Q.aimA||0;else if(rd)want=Q.f>0?0:Math.PI;else{let e=null;if(p&&p.kqSwT>0)e=kqAimPick(300);else if(fight&&Q.near&&!Q.chase)e=Q.near;if(e){const c=kqC(e);want=Math.atan2(c.y-Q.y,c.x-Q.x)}else want=Q.fightT>0?(Q.f>0?-.14:Math.PI+.14):-Math.PI/2}
+ if(Q.ang==null)Q.ang=want;let da=want-Q.ang;while(da>Math.PI)da-=6.283;while(da<-Math.PI)da+=6.283;Q.ang+=da*(Q.rs==="cmd"?1:.22);
+ const a=Q.ang+(Q.spinA||0)*0,bob=rd?0:Math.sin(G.t*.07)*1.5;ctx.save();ctx.translate(Q.x,Q.y+bob);
+ ctx.save();ctx.globalCompositeOperation="lighter";ctx.globalAlpha=fight||rd?.5:.3;ctx.drawImage(glow("#6ac8ff",L*.5),-L*.5,-L*.5,L,L);ctx.restore();
+ if(Math.cos(a)<0){ctx.scale(1,-1);drawKQSword(0,0,-a,L,1,true)}else drawKQSword(0,0,a,L,1,true);ctx.restore()}
+{const _up=updatePlayer;updatePlayer=function(){const p=P,Q=G.kqPet;if(p&&save.cls===5&&Q&&Q.rs==="ride"&&G.scene==="stage"){const a=inp,b=jp,c=jr,x0=p.x,y0=p.y,z={left:0,right:0,up:0,down:0,jump:0,dash:0};inp=Object.assign({},a,z);jp=Object.assign({},b,z);jr=Object.assign({},c,z);p.vx=0;p.vy=0;let r;try{r=_up.apply(this,arguments)}finally{inp=a;jp=b;jr=c}p.x=x0;p.y=y0;p.vx=0;p.vy=0;p.onG=false;return r}return _up.apply(this,arguments)}}
+{const _f=kqFire;kqFire=function(lv){const r=_f.apply(this,arguments);try{kqSwordCmd()}catch(er){console.error(er)}return r}}
+{const _s=kqSkill;kqSkill=function(i){const p=P,had=!!(p&&p.cds&&p.cds[1]>0);const r=_s.apply(this,arguments);if(i===1&&p&&save.cls===5&&kqBK()&&p.cds&&p.cds[1]>0&&!had){p.kqSwT=480;popup("KIẾM LỆNH",p.x+6,p.y-26,"#9fe8ff",8)}return r}}
+{const _ks=kqSkills;kqSkills=function(){const r=_ks();if(kqBK()&&r[1])r[1]=Object.assign({},r[1],{d:r[1].d+". Mở Kiếm Lệnh 8 giây: kiếm pet chĩa vào địch đang aim và đâm tới mỗi lần đánh X"});return r}}
 // mở khóa khi xong Phần 5
 (function(){const _f=dsFinish;dsFinish=function(k){if(k===4&&save&&!save.kqBK){save.kqBK=1;persist()}return _f(k)}})();
 /* ===================== PHẦN 5 · LƯ HƯƠNG (ĐIỂM LƯU + DỊCH CHUYỂN + LỘ QUÁI ẨN) ===================== */
@@ -10336,7 +10392,7 @@ const _t5H11=t5Hud;t5Hud=function(){_t5H11();const M=G.m5;if(!M||!M.tp||G.stage!
 (function(){const d=DSDR.dinhan;DSDR.dinhan=function(e,x,y,t,f){if(e.rev&&e.st==="still"){const s=e.st;e.st="rec";ctx.save();ctx.globalAlpha*=.55;d(e,x,y,t,f);ctx.restore();e.st=s;if(t%12===0)parts.push({x:x+rnd(-8,8),y:y-rnd(4,28),vx:0,vy:-.3,life:20,c:"rgba(255,207,138,.5)",s:1.6});return}d(e,x,y,t,f)}})();
 (function(){const d=DSDR.quyhon;DSDR.quyhon=function(e,x,y,t,f){if(e.rev&&(e.st==="hide"||e.st==="idle")){const s=e.st;e.st="rec";ctx.save();ctx.globalAlpha*=.55;d(e,x,y,t,f);ctx.restore();e.st=s;if(t%12===0)parts.push({x:x+rnd(-8,8),y:y-rnd(4,24),vx:0,vy:-.3,life:20,c:"rgba(255,207,138,.5)",s:1.6});return}d(e,x,y,t,f)}})();
 
-(function(){const _s=startStage;startStage=function(i){G.kqFx2=[];if(P){P.kqZH=null;P.kqTBc=0}return _s(i)}})();
+(function(){const _s=startStage;startStage=function(i){G.kqFx2=[];G.kqPet=null;if(P){P.kqZH=null;P.kqTBc=0}return _s(i)}})();
 /* ---------- D (Bí Kíp): luân đập đất để lại vết nứt nhẹ ---------- */
 (function(){const _t=kqTick;kqTick=function(){_t();if(!P||G.scene!=="stage"||save.cls!==5||!kqBK())return;for(const q of G.kqFx||[]){if(q.k==="quake"&&!q.crk){q.crk=1;const s=Math.random()*999;(G.kqCrk=G.kqCrk||[]).push({x:q.x,y:q.y,t:0,life:300,s,br:[...Array(6)].map((_,i)=>{const d=i%2?1:-1,len=14+hash(i,s)*22;const pts=[[0,0]];let x=0,y=0;for(let k=1;k<=4;k++){x+=d*len/4;y=(hash(i*7+k,s)-.5)*3;pts.push([x,y])}return pts})})}}G.kqCrk=(G.kqCrk||[]).filter(c=>++c.t<c.life)}})();
 (function(){const _d=drawKQW;drawKQW=function(){if(G.scene==="stage"&&G.kqCrk&&G.kqCrk.length){const t=G.t;for(const c of G.kqCrk){const a=c.t<10?c.t/10:Math.min(1,(c.life-c.t)/60);ctx.save();ctx.translate(c.x,c.y-.5);ctx.globalAlpha=.85*a;ctx.strokeStyle="#0a0810";ctx.lineWidth=1.4;ctx.lineCap="round";for(const b of c.br){ctx.beginPath();ctx.moveTo(0,0);for(const[x,y]of b)ctx.lineTo(x,y);ctx.stroke()}ctx.lineWidth=.7;for(const b of c.br){const m=b[2];ctx.beginPath();ctx.moveTo(m[0],m[1]);ctx.lineTo(m[0]+(m[0]>0?4:-4),m[1]-2.4);ctx.stroke()}
@@ -10849,8 +10905,7 @@ const KQF={burn:false,crit:.45,critM:1.8,luan:1,chain:1};
 function kqFireTier(){const n=P&&P.kqFN|0;return n>=60?.01:n>=20?.005:0}
 {const _kD=kqDmg;kqDmg=function(e,d,set,fl){if(!G._kqLuan||typeof d!=="number")return _kD(e,d,set,fl);
  let dd=d*KQF.luan;const crit=Math.random()<KQF.crit;if(crit)dd*=KQF.critM;const n0=pops.length;const r=_kD(e,dd,set,fl);if(r&&crit)for(let i=n0;i<pops.length;i++){const q=pops[i];if(q&&q.dmg){q.c="#ffd34d";q.sz=13;q.life=40}}
- if(r){const c=kqC(e);if(crit)burst(c.x,c.y,"#ffd34d",8);P.kqFN=(P.kqFN|0)+1;P.kqFT=0;const pct=kqFireTier();if(P.kqFN===20||P.kqFN===60){popup(P.kqFN===20?"LỬA VÀNG":"LỬA VÀNG · CỰC",P.x+6,P.y-26,"#ffcf3a",9);sfx("nova")}
-  if(KQF.burn&&pct&&!e.hzp&&!(e!==B&&e.dead)){e.kqBurn={t:120,pct};if(e!==B&&!e.kqMax)e.kqMax=Math.max(e.maxhp||0,e.hp)}}return r}}
+ if(r){const c=kqC(e);if(crit)burst(c.x,c.y,"#ffd34d",8);}return r}}
 function kqChainHit(){for(const w of G.kqW||[]){if(w.free||w.done||w.rx!=null)continue;const H=kqHand(w.h),dx=w.x-H.x,dy=w.y-H.y,L2=dx*dx+dy*dy;if(L2<30*30)continue;w.cset=w.cset||new Set();
   for(const e of kqHitL()){if(w.cset.has(e)||(w.set&&w.set.has(e)))continue;const c=kqC(e);let u=((c.x-H.x)*dx+(c.y-H.y)*dy)/L2;if(u<.08||u>.82)continue;const px=H.x+dx*u,py=H.y+dy*u;if(Math.abs(c.x-px)>e.w/2+3||Math.abs(c.y-py)>e.h/2+3)continue;
    w.cset.add(e);let d=Math.max(.5,Math.round((w.dmg||2)*KQF.chain*10)/10);const cr=Math.random()<KQF.crit;if(cr)d=Math.round(d*KQF.critM*10)/10;const n0=pops.length;if(e===B){if(kqBossOk()){B.inv=0;damageBoss(d)}}else{e._kqHit=1;hitEnemy(e,d,null,"kqchain")}if(cr)for(let i=n0;i<pops.length;i++){const q=pops[i];if(q&&q.dmg){q.c="#ffd34d";q.sz=13;q.life=40}}burst(px,py,"#cfe8ff",4)}}}
@@ -10858,8 +10913,8 @@ function kqBurnTick(){const L0=ens.slice();if(B&&B.kqBurn)L0.push(B);for(const e
   if(G.t%3===0){const x=e===B?B.x+B.w/2:e.x+e.w/2,y=e===B?B.y+B.h:e.y+e.h;parts.push({x:x+rnd(-e.w/2,e.w/2),y:y-rnd(0,e.h),vx:rnd(-.2,.2),vy:-rnd(.6,1.4),life:18,c:Math.random()<.5?"#ffcf3a":"#fff2a0",s:rnd(1.4,2.4)})}
   if(b.t%60===0){if(e===B){const d=Math.max(1,Math.round((B.max||B.hp)*b.pct*10)/10);B.inv=0;damageBoss(d);dmgNum(d,B.x+B.w/2,B.y-4,false);pops[pops.length-1].c="#ff9a2a"}else{const mx=e.kqMax||e.maxhp||e.hp,d=Math.max(.5,Math.round(mx*b.pct*10)/10);if(e.hp-d<=kqExecT(e)){e.inv=0;e._kqHit=1;kqExec(e,d)}else{e.hp-=d;dmgNum(d,e.x+e.w/2,e.y-4,false);pops[pops.length-1].c="#ff9a2a"}}}
   if(b.t<=0)e.kqBurn=null}}
-{const _kT=kqTick;kqTick=function(){const r=_kT.apply(this,arguments);if(G.scene==="stage"&&P&&save.cls===5&&!G.dlg&&!G.dead){try{kqChainHit();kqBurnTick()}catch(er){console.error(er)}P.kqFT=(P.kqFT|0)+1;if(P.kqFT>300&&P.kqFN){P.kqFN=0}}return r}}
-{const _dHK=drawHUD;drawHUD=function(th){const r=_dHK.apply(this,arguments);try{if(G.scene==="stage"&&P&&save.cls===5){const n=P.kqFN|0;if(n>=2){const c=n>=60?"#ffa02a":n>=20?"#ffd34d":"#e8eef8",x=26,y=my0HP-7,pul=(P.kqFT|0)<6?1.15:1;ctx.save();ctx.translate(x,y);ctx.scale(pul,pul);txt("COMBO "+n,0,0,6.5,c,"left",FD,700,true);if(n>=20){const w=ctx.measureText("COMBO "+n).width;ctx.globalAlpha=.85;ctx.fillStyle=c;const fx=w+5;ctx.beginPath();ctx.moveTo(fx,2);ctx.quadraticCurveTo(fx-3.4,-1,fx,-6+Math.sin(G.t*.3));ctx.quadraticCurveTo(fx+.8,-2,fx+2.4,-3);ctx.quadraticCurveTo(fx+3.4,0,fx,2);ctx.fill()}ctx.restore()}}}catch(er){}return r}}
+{const _kT=kqTick;kqTick=function(){const r=_kT.apply(this,arguments);if(G.scene==="stage"&&P&&save.cls===5&&!G.dlg&&!G.dead){try{kqChainHit()}catch(er){console.error(er)}}return r}}
+{const _dHK=drawHUD;drawHUD=function(th){const r=_dHK.apply(this,arguments);try{if(false){const n=0;if(n>=2){const c=n>=60?"#ffa02a":n>=20?"#ffd34d":"#e8eef8",x=26,y=my0HP-7,pul=(P.kqFT|0)<6?1.15:1;ctx.save();ctx.translate(x,y);ctx.scale(pul,pul);txt("COMBO "+n,0,0,6.5,c,"left",FD,700,true);if(n>=20){const w=ctx.measureText("COMBO "+n).width;ctx.globalAlpha=.85;ctx.fillStyle=c;const fx=w+5;ctx.beginPath();ctx.moveTo(fx,2);ctx.quadraticCurveTo(fx-3.4,-1,fx,-6+Math.sin(G.t*.3));ctx.quadraticCurveTo(fx+.8,-2,fx+2.4,-3);ctx.quadraticCurveTo(fx+3.4,0,fx,2);ctx.fill()}ctx.restore()}}}catch(er){}return r}}
 /* ===== Địa hình Tầng 5 (Phần 3-5): mép đá chi tiết, lõi đá tối dần vào trong (tham khảo cách làm tileset hang động) ===== */
 function t5Dep(tx,ty){const W=L.W;if(!L.dep||L.dep.length!==W*ROWS){L.dep=new Uint8Array(W*ROWS);L.depS=new Int32Array(W*ROWS).fill(-1)}const i=ty*W+tx,st=G.t>>5;if(L.depS[i]===st)return L.dep[i];
  let d=4;const S=(x,y)=>x<0||x>=W||y<0||y>=ROWS||(L.g[y][x]&&L.g[y][x]!==3);for(let r=1;r<4&&d===4;r++){for(let k=-r;k<=r&&d===4;k++){if(!S(tx+k,ty-r)||!S(tx+k,ty+r)||!S(tx-r,ty+k)||!S(tx+r,ty+k))d=r}}L.dep[i]=d;L.depS[i]=st;return d}
@@ -11899,4 +11954,16 @@ function kqExec(e,d){try{hitEnemy(e,d,null,"kqburn")}catch(er){}if(!e.dead&&!e.c
  };
 }
 
+/* ===== KQ: giới hạn kích thước luân ở tối đa 2 lần kích thước gốc ===== */
+{
+ const _kqNewSizeCap=kqNew;
+ kqNew=function(h,m,o){const w=_kqNewSizeCap(h,m,o);w.baseSc=Math.max(.01,w.sc||1);return w};
+ const _kqTickSizeCap=kqTick;
+ kqTick=function(){const r=_kqTickSizeCap.apply(this,arguments);for(const w of G.kqW||[]){if(!w||!Number.isFinite(w.sc))continue;const base=Math.max(.01,w.baseSc||(w.sc||1));w.sc=Math.min(w.sc,base*2)}return r};
+}
+
+/* ===== KQ: khôi phục ZX nguyên bản, bỏ hoàn toàn cơ chế giữ X để gồng ===== */
+KQF.zx=true;
+/* Bỏ wrapper ZX Charge; dùng đòn ZX cơ bản (ném song xích luân) ngay khi kích hoạt. */
+kqZX=function(){const r=_kqZX9.apply(this,arguments);if(P)P.kqZH=null;return r};
 </script>
